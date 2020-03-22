@@ -41,7 +41,7 @@ v <- 2.6 + 0i
 print(v) # will show "2.6+0i"
 print(class(v)) # Will resolve as complex even if 0i
 
-# vs code linter does not like single-code strings
+# linter does not like single-code strings
 v <- "a"
 print(class(v)) # "character"
 
@@ -104,9 +104,10 @@ print(v); print(class(v))
 v <- c(TRUE, FALSE, charToRaw("0"))
 print(v); print(class(v))
 
-# Conversion preference
-# Given an item in a vector, if that has a type of (pick one below),
-#     all items to the left of that type will be converted to that type
+# Coercion preference
+# Given an item in a homogenized R-object, if that has 
+#     a type of (pick one below), all items to the left of that type will be
+#     coerced (fancy name for conversion) to that type
 # raw >> logical >> integer >> numeric >> complex >> character
 
 # Precision in output is additive though
@@ -196,3 +197,63 @@ bmi <- data.frame(
 ) # syntax doesn't work with <-
 print(bmi)
 print(class(bmi)) # "data.frame"
+
+#------------------------------------------------------------------------------#
+# Variable name rules                                                          #
+#------------------------------------------------------------------------------#
+
+# can have . and _ in names
+
+var.name <- "works, but linter doesn't like it"
+var_name <- "snake_case"
+var_name. <- "trailing dot allowed, but linter doesn't like it"
+
+. <- "a dot. just a dot."
+print(.) # this works
+
+# can start with . but not with _
+# varnames that start with . are hidden from ls()
+
+.varname <- "this will be hidden later..."
+# _varname is erroneous
+
+# . then a number (e.g., .3) is a number, not a variable name
+# . then a number than a letter (e.g., .3n) is erroneous
+
+# can't start with a number
+
+#------------------------------------------------------------------------------#
+# Concat                                                                       #
+#------------------------------------------------------------------------------#
+
+# Concatenate and print
+cat(1, 2, 3, "\n")
+
+v <- cat(1, 2, 3, "\n") # executes and returns NULL
+print(v); # NULL
+print(class(v)); # "NULL"
+
+#------------------------------------------------------------------------------#
+# Treat vars like files with ls() and rm()                                     #
+#------------------------------------------------------------------------------#
+
+ls() # RETURNS a charcter vector
+v <- ls()
+print(v); print(class(v))
+
+ls(pattern = "var") # returns variable names that start with "var"
+ls(pattern = "var", all.names = TRUE) # now includes .varname
+
+rm(.varname)
+
+.varname <- "delete me"
+v <- rm(.varname) # executes and returns NULL
+print(v); # NULL
+print(class(v)); # "NULL"
+
+.varname = "delete me again"
+rm(".varname") # varnames in quotes are allowed
+
+rm(list = ls()) # specify a vector to delete multiple vars using list= param
+
+print(ls()) # an empty ls is still a character vector with a size of 0
