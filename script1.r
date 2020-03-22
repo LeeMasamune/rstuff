@@ -162,6 +162,28 @@ print(a)
 print(class(a)) # "array"
 
 #------------------------------------------------------------------------------#
+# Factors                                                          Homogenized #
+#------------------------------------------------------------------------------#
+
+# Create a vector.
+apple_colors <- c("green", "green", "yellow",
+                  "red", "red", "red",
+                  "green", "blue")
+
+# Create a factor object.
+factor_apple <- factor(apple_colors) # creates a set of vector and levels
+                                     # levels is a set of distinct values in
+                                     #     the vector converted to characters
+
+# Print the factor.
+print(factor_apple)
+print(class(factor_apple)) # "factor"
+
+
+print(nlevels(factor_apple)) # simply the count of levels
+print(class(nlevels(factor_apple))) # "integer"
+
+#------------------------------------------------------------------------------#
 # Data Frames                                                     Heterogenous #
 #------------------------------------------------------------------------------#
 
@@ -171,6 +193,6 @@ bmi <- data.frame(
    height   = c(152, 171.5, 165),
    weight   = c(81, 93, 78),
    age      = c(42, 38, 26)
-)
+) # syntax doesn't work with <-
 print(bmi)
 print(class(bmi)) # "data.frame"
