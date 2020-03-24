@@ -15,7 +15,7 @@ if (FALSE) { # R has no official multiline comments
 print(my_string)
 
 #------------------------------------------------------------------------------#
-# Basic Types
+# Basic Types                                                                  #
 #------------------------------------------------------------------------------#
 
 # R is dynamically typed
@@ -257,3 +257,175 @@ rm(".varname") # varnames in quotes are allowed
 rm(list = ls()) # specify a vector to delete multiple vars using list= param
 
 print(ls()) # an empty ls is still a character vector with a size of 0
+
+#------------------------------------------------------------------------------#
+# The usual operators                                                          #
+#------------------------------------------------------------------------------#
+
+# Works for each vector item pairs
+# longer object length must be a multiple of shorter object length
+
+a <- c(1L, 2L, 3L, 4L)
+b <- c(5 + 0i, 6 + 0i)
+c <- 0
+
+c <- a + b # coercion prefs apply
+print(c)
+
+c <- a - b
+print(c)
+
+c <- a * b
+print(c)
+
+c <- a / b
+print(c)
+c <- b / a
+print(c)
+
+a <- c(1L, 2L, 3L, 4L)
+b <- c(5, 6)
+c <- b %% a # remainder, doesn't work with complex numbers
+print(c)
+
+c <- b %/% a # integer division
+print(c)
+
+# < > == <= >= != works as expected
+
+#------------------------------------------------------------------------------#
+# Element-wise operators                                                       #
+#------------------------------------------------------------------------------#
+
+# Coerces each vector item to a logical value and performs a boolean operator
+
+a <- c(NULL, NULL, 0L, 0L, 1L, -1L, 0i, 0i)
+b <- c(TRUE, FALSE)
+print(a & b)
+
+# NULL is treated as FALSE only if used with other non-NULL items
+print(FALSE == NULL) # prints "logical(0)"
+print(FALSE & NULL) # prints "logical(0)"
+a <- c(NULL, 0)
+b <- c(FALSE, 0)
+print(a & b) # prints "FALSE FALSE"
+
+a <- c(3, 1, TRUE, 2 + 3i)
+print(class(a)); print(a)
+b <- c(4, 1, FALSE, 2 + 3i)
+print(class(b)); print(b)
+print(a & b)
+
+# & | ! for AND, OR and NOT
+
+# && and || for AND and OR but for the first element pair only, returns atomic
+
+
+#------------------------------------------------------------------------------#
+# Unusual operators                                                            #
+#------------------------------------------------------------------------------#
+
+# colon operator - series fill
+
+v <- 2:8 # colon for series as vector
+print(v) # 2 3 4 5 6 7 8
+
+print(TRUE:FALSE) # works
+print(FALSE:TRUE) # works
+print(100:-100) # works
+print(100 - 100i : -100 + 100i) # "imaginary parts discarded in coercion", weird
+
+print(1.00:2.01) # only integers show up
+
+
+### in operator - existence check
+
+d <- c(1, 3)
+print(d %in% v) # each item in vector left is check for existence in
+                # vector right, results to a vector for each check
+
+
+### star operator - matrix multiplication
+
+h <- c(0, 0, 1, 0, 1, 0)
+m1 <- matrix(h, nrow = 3, ncol = 2, byrow = TRUE)
+print(m1)
+
+i <- c(5, 6, 7, 8, 9, 0)
+m2 <- matrix(i, nrow = 2, ncol = 3, byrow = TRUE)
+print(m2)
+
+print(m1 %*% m2)
+
+print(m1)
+print(t(m1)) # matrix transpose function
+
+
+#------------------------------------------------------------------------------#
+# Code branching                                                               #
+#------------------------------------------------------------------------------#
+
+v <- TRUE
+
+if (v) {
+    print("Hello, from the top block!")
+} else {
+    print("Hello, from the bottom block!")
+}
+
+if (v) {
+    print("Hello, from the top block!")
+} else if (v) {
+    print("Hello, from the second block!")
+} else {
+    print("This works as you'd expect!")
+}
+
+x <- c("what", "is", "truth")
+if ("Truth" %in% x) {
+    print("Truth is found the first time")
+} else if ("truth" %in% x) { # character values are case-sensitive
+    print("Truth is found the second time")
+} else {
+    print("No truth found")
+}
+
+# switch is a function, different behavior if arg1 resolves to number or char
+v <- 2
+x <- switch(v, "one", "zwei", "tres", "apat")
+print(x)
+
+# repeat loop
+
+v <- c("hello", "loop")
+cnt <- 2
+
+repeat {
+    print(v)
+    cnt <- cnt + 1
+    if (cnt > 5) {
+        break
+    }
+}
+
+# while (logical_expr) { block } - works as expected
+
+for (value in v) {
+    print(value)
+}
+print(value) # still exists outside of for-loop
+
+m <- matrix(data = c(1, 2, 3, 4, 5, 6), nrow = 2, ncol = 3, byrow = TRUE)
+print(m)
+for (value in m) {
+    print(value) # 1 4 2 5 3 6
+}
+
+v <- c()
+for (value in v) {
+    print("HEY!") # does not print as expected
+    print(value)
+}
+
+# break works as expected
+# next is continue
