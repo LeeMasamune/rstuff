@@ -12,24 +12,26 @@ The *Lab* sections of ISLR 7th printing will be used as basis.
     * SAS/IML [Row vectors vs column vectors](#row-vectors-vs-column-vectors)
     * R [Getting the vector length](#getting-the-vector-length-p43)
     * R [Vector addition](#vector-addition-p43)
-    * R [Functions: `ls()` and `rm()`](#functions-ls-and-rm-p43)
+    * R [Functions: `ls(...)` and `rm(...)`](#functions-ls-and-rm-p43)
     * R [Making a matrix](#making-a-matrix-p44)
     * R [Caret operator (`^`)](#caret-operator-^-p45)
     * R [Random numbers in normal distribution](#random-numbers-in-normal-distribution-p45)
+    * R [Functions `mean(...)`, `var(...)` and `sd(...)`](#functions-mean-var-and-sd-p45)
+
 ---
 
-## SAS and R
+## SAS/IML and R
 
-It is possible to submit R statements in `proc iml`. However, such a feature must be enabled (it does not work out of the box).
+It is possible to submit R statements in `proc iml`. However, such a feature 
+must be enabled since it does not work out of the box. See documentation 
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_r_sect001.htm&docsetVersion=14.3&locale=en).
 
-See documentation [here]().
-
-[SAS Univeristy Edition]<br/>
+**SAS Univeristy Edition**<br/>
 The documentation explicitly states that:
 >You cannot call R from the free SAS University Edition. The SAS University 
 >Edition runs on a virtual machine that does not have R installed.
 
-[Licensed environments]<br/>
+**Licensed environments**<br/>
 The RLANG system option must be supported by the host. See documentation 
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_r_sect003.htm&docsetVersion=14.3&locale=en).
 
@@ -39,7 +41,7 @@ The RLANG system option must be supported by the host. See documentation
 
 ---
 
-### Declaring a vector (p43)
+### Declaring a vector (p.43)
 
 R code:
 ```r
@@ -103,9 +105,12 @@ SAS results (HTML):
 
 ### Row vectors vs column vectors
 
-A vector in SAS/IML is a special matrix with dimensions of either 1×*n* or 
-*m*×1. In contrast, R does not natively distinguish between row vectors and 
-column vectors.[*1]
+A vector in SAS/IML is a special matrix with dimensions of either *n*x1 "column 
+vector" or 1×*p* "row vector". Documentation
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_languagechap_sect001.htm&docsetVersion=14.3&locale=en).
+
+In contrast, R does not natively distinguish 
+between row vectors and column vectors.[*1]
 
 > [*1] Needs verification: "R does not..."
 
@@ -172,15 +177,7 @@ Note how an explicitly-written row vector does not have commas.
 
 ---
 
-*From hereafter, R codes and output will be condensed similar to the code 
-blocks in ISLR.*
-
-*From hereafter, SAS logs will be omitted unless for the purpose of showing 
-SAS log error messages.*
-
----
-
-### Getting the vector length (p43)
+### Getting the vector length (p.43)
 
 R:
 ```
@@ -250,7 +247,7 @@ SAS results (HTML):
 </tbody>
 </table>
 
-Note how the a result of the `dimension()` function are two numbers, for the 
+Note that the a result of the `dimension(m)` function are two numbers, for the 
 number of rows and columns, respectively.
 
 Aternatively if y is a row vector:
@@ -287,15 +284,16 @@ SAS result (HTML):
 </tbody>
 </table>
 
-The result of the `dimension()` function is also a matrix. Documentation 
+The result of the `dimension(m)` function is also a matrix. Documentation 
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect110.htm&docsetVersion=14.3&locale=en).
 
-SAS/IML also has a lenghth function, but does not give the length of a vector. 
-Documentation [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect215.htm&docsetVersion=14.3&locale=en).
+SAS/IML also has a length function, but does not give the length of a vector. 
+Documentation 
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect215.htm&docsetVersion=14.3&locale=en).
 
 ---
 
-### Vector addition (p43)
+### Vector addition (p.43)
 
 R:
 ```
@@ -359,11 +357,11 @@ SAS log:
  ERROR: (execution) Matrices do not conform to the operation.
 ```
 
-SAS/IML will not add a 1×*n* matrix and an *m*×1 matrix.
+SAS/IML will not add an *n*×1 matrix and a 1×*p* matrix.
 
 ---
 
-### Functions: `ls()` and `rm()` (p43)
+### Functions: `ls(...)` and `rm(...)` (p.43)
 
 R:
 ```
@@ -374,13 +372,13 @@ R:
 character (0)
 ```
 
-No parallel SAS/IML codes for `ls` and `rm` have been found yet[*2].
+No parallel SAS/IML codes for `ls(...)` and `rm(...)` have been found yet.[*2]
 
 > [*2] Needs verification
 
 ---
 
-### Making a matrix (p44)
+### Making a matrix (p.44)
 
 R:
 ```
@@ -466,9 +464,9 @@ SAS result (HTML):
 </table>
 
 The behavior of the SAS/IML declaration seems to mimic the `byrow=TRUE` option 
-in the R `matrix()` method.
-
-Documentation [here]().
+in the R `matrix()` method. Which elements go to which row and column are 
+controlled by where commas are placed. Documentation 
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_workmatrix_sect002.htm&docsetVersion=14.3&locale=en).
 
 There is no built-in `matrix()` function in SAS/IML. [*3]
 
@@ -476,7 +474,7 @@ There is no built-in `matrix()` function in SAS/IML. [*3]
 
 ---
 
-### Function `sqrt()` (p44)
+### Function `sqrt()` (p.44)
 
 R:
 ```
@@ -518,12 +516,13 @@ SAS result (HTML):
 </tbody>
 </table>
 
-The `sqrt()` function in SAS/IML seems the same as the `sqrt()` function in R.
-Documentation [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect461.htm&docsetVersion=14.3&locale=en).
+The `sqrt(m)` function in SAS/IML seems the same as the `sqrt(...)` function in 
+R. Documentation 
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect461.htm&docsetVersion=14.3&locale=en).
 
 ---
 
-### Caret operator (`^`) (p45)
+### Caret operator (`^`) (p.45)
 
 R:
 ```
@@ -576,6 +575,245 @@ SAS/IML also has a matrix power operator (`**` in `m ** p`), which multiples a
 matrix `m` by itself `p` times. Documentation 
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect046.htm&docsetVersion=14.3&locale=en).
 
-### Random numbers in normal distribution (p45)
+### Random numbers in normal distribution (p.45)
+
+R:
+```
+> x=rnorm(50)
+> y=x+rnorm(50,mean=50,sd=.1)
+> cor(x,y)
+[1] 0.995
+```
+
+SAS code:
+```sas
+proc iml;
+    x = randfun(50, "Normal");
+    y = x + randfun(50, "Normal", 50, 0.1);
+    m = x || y;
+    c = corr(m);
+    print c;
+quit;
+```
+
+SAS result (HTML):
+<table class="table" rules="all" frame="box" summary="Procedure IML: c" cellspacing="0" cellpadding="5" bordercolor="#C1C1C1">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="c b header" colspan="2" scope="colgroup">c</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="r data">1</td>
+<td class="r data">0.9952377</td>
+</tr>
+<tr>
+<td class="r data">0.9952377</td>
+<td class="r data">1</td>
+</tr>
+</tbody>
+</table>
+
+The SAS/IML function `randfun(...)` may accept other types of distribution 
+other than "Normal". Documentation 
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect336.htm&docsetVersion=14.3&locale=en).
+
+There is also `randnormal(n, mean, cov)` that has a different third parameter. 
+Documentation 
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect375.htm&docsetVersion=14.3&locale=en).
+
+The `corr(...)` function accepts a matrix and outputs a matrix. The 
+function does not accept mutiple vectors as in R. Multiple vectors must be 
+combined into a *m*×*p* matrix. Documentation 
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect085.htm&docsetVersion=14.3&locale=en).
+
+To put the column vectors x and y into once matrix they were concatenated using the horizontal concatenation operator `||`. Documentation 
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect032.htm&docsetVersion=14.3&locale=en).
+
+---
+
+### Random seed (p.45)
+
+R:
+```
+> set.seed(1303)
+> rnorm(50)
+[1] -1.1440 1.3421 2.1854 0.5364 0.0632 0.5022 -0.0004
+...
+```
+
+Note that different builds of R (64-bit vs 32-bit, Windows vs Unix, etc.) may 
+have differences in results. Consecutive calls to `rnorm(...)` will move the 
+random number generator forward:
+
+R (additional example):
+```
+> set.seed(1303)    # seed set to 1303
+> rnorm(5)          # shows random numbers 1-5 for seed 1303
+[1] -1.14397631  1.34212937  2.18539048  0.53639252  0.06319297
+>
+> set.seed(1303)    # seed set to 1303
+> rnorm(5)          # shows random numbers 1-5 for seed 1303
+[1] -1.14397631  1.34212937  2.18539048  0.53639252  0.06319297
+>
+> rnorm(5)          # shows random numbers 6-10 for seed 1303
+[1]  0.5022344825 -0.0004167247  0.5658198405 -0.5725226890 -1.1102250073
+>
+> set.seed(1303)    # seed set to 1303
+> rnorm(10)         # shows random numbers 1-10 for seed 1303
+[1] -1.1439763145  1.3421293656  2.1853904757  0.5363925179  0.0631929665
+[6]  0.5022344825 -0.0004167247  0.5658198405 -0.5725226890 -1.1102250073
+```
+
+> Computers are deterministic at the core and predictability is in 
+> the design. True randomness comes outside from the system as an input 
+> — a "true random" computer only *gets* this input in an automated manner 
+> (e.g., atmospheric sensor data, quantum phenomena). 
+> [Ask an engineer](https://engineering.mit.edu/engage/ask-an-engineer/can-a-computer-generate-a-truly-random-number/).
+>
+> The 
+> [`RDRAND` instruction](https://en.wikipedia.org/wiki/RDRAND)
+> which is available in modern, publicly-available CPUs  uses thermal noise 
+> within the silicon to seed its random number generator. The random factor is 
+> still an input, and any random number generated from this scheme does not 
+> come from pure calculation. *The CPU itself does not make the random, it gets 
+> the random from somewhere else.*
+
+SAS code:
+
+```sas
+proc iml;
+    call randseed(1303);
+    x = randfun(5, "Normal");
+    print x;
+quit;
+```
+
+SAS result (HTML):
+<table class="table" rules="all" frame="box" summary="Procedure IML: x" cellspacing="0" cellpadding="5" bordercolor="#C1C1C1">
+<colgroup>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="c b header" scope="col">x</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="r data">0.2875899</td>
+</tr>
+<tr>
+<td class="r data" nowrap="">-0.685311</td>
+</tr>
+<tr>
+<td class="r data" nowrap="">-2.033587</td>
+</tr>
+<tr>
+<td class="r data" nowrap="">-1.019879</td>
+</tr>
+<tr>
+<td class="r data" nowrap="">-0.269627</td>
+</tr>
+</tbody>
+</table>
+
+Note how SAS/IML has a different result from random numbers generated in R even 
+for the same seed value.
+
+The `randseed(...)` call will only reset SAS's random number generation only 
+if a true value is passed as a second argument. Documentation
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect379.htm&docsetVersion=14.3&locale=en).
+
+SAS code (additional example):
+```sas
+proc iml;
+    call randseed(1303);
+    run1 = randfun(5, "Normal");     * generates random numbers 1-5 ;
+    run2 = randfun(5, "Normal");     * generates random numbers 6-10 ;
+    
+    call randseed(1303, 1);          * resets the RNG ;
+    run3 = randfun(10, "Normal");    * generates random numbers 1-10 ;
+    
+    print run1 run2 run3;
+quit;
+```
+
+SAS result (HTML):
+<table class="table" rules="all" frame="box" summary="Procedure IML: run1_run2_run3" cellspacing="0" cellpadding="5" bordercolor="#C1C1C1">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="r b header" scope="col">run1</th>
+<th class="r b header" scope="col">run2</th>
+<th class="r b header" scope="col">run3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="r data">0.2875899</td>
+<td class="r data">0.269403</td>
+<td class="r data">0.2875899</td>
+</tr>
+<tr>
+<td class="r data" nowrap="">-0.685311</td>
+<td class="r data">0.6187675</td>
+<td class="r data" nowrap="">-0.685311</td>
+</tr>
+<tr>
+<td class="r data" nowrap="">-2.033587</td>
+<td class="r data" nowrap="">-0.217801</td>
+<td class="r data" nowrap="">-2.033587</td>
+</tr>
+<tr>
+<td class="r data" nowrap="">-1.019879</td>
+<td class="r data" nowrap="">-0.540015</td>
+<td class="r data" nowrap="">-1.019879</td>
+</tr>
+<tr>
+<td class="r data" nowrap="">-0.269627</td>
+<td class="r data">1.4973863</td>
+<td class="r data" nowrap="">-0.269627</td>
+</tr>
+<tr>
+<td class="r data">&nbsp;</td>
+<td class="r data">&nbsp;</td>
+<td class="r data">0.269403</td>
+</tr>
+<tr>
+<td class="r data">&nbsp;</td>
+<td class="r data">&nbsp;</td>
+<td class="r data">0.6187675</td>
+</tr>
+<tr>
+<td class="r data">&nbsp;</td>
+<td class="r data">&nbsp;</td>
+<td class="r data" nowrap="">-0.217801</td>
+</tr>
+<tr>
+<td class="r data">&nbsp;</td>
+<td class="r data">&nbsp;</td>
+<td class="r data" nowrap="">-0.540015</td>
+</tr>
+<tr>
+<td class="r data">&nbsp;</td>
+<td class="r data">&nbsp;</td>
+<td class="r data">1.4973863</td>
+</tr>
+</tbody>
+</table>
+
+---
+
+### Functions `mean(...)`, `var(...)` and `sd(...)` (p.45)
 
 > TODO
