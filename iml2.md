@@ -2,7 +2,7 @@
 
 This is a record of exploring whether features of R can be reproduced in 
 SAS/IML and so shall provide demonstrations where it does and alternatives 
-where it doesn't.
+where it doesn't. This is NOT intended to be a tutorial of any sort.
 
 The *Lab* sections of ISLR 7th printing will be used as basis.
 
@@ -12,11 +12,18 @@ The *Lab* sections of ISLR 7th printing will be used as basis.
     * SAS/IML [Row vectors vs column vectors](#row-vectors-vs-column-vectors)
     * R [Getting the vector length](#getting-the-vector-length-p43)
     * R [Vector addition](#vector-addition-p43)
-    * R [Functions: `ls(...)` and `rm(...)`](#functions-ls-and-rm-p43)
+    * R [Functions `ls(...)` and `rm(...)`](#functions-ls-and-rm-p43)
     * R [Making a matrix](#making-a-matrix-p44)
+    * R [Function `sqrt(...)`](#function-sqrt-p44)
     * R [Caret operator (`^`)](#caret-operator-^-p45)
     * R [Random numbers in normal distribution](#random-numbers-in-normal-distribution-p45)
     * R [Functions `mean(...)`, `var(...)` and `sd(...)`](#functions-mean-var-and-sd-p45)
+* ISLR [2.3.2 Graphics](#2.3.2-Graphics)
+    * R [Function `plot(...)`](#function-plot-p.45)
+    * R [Saving graphs](#saving-graphs-p46)
+    * R [Function `seq(...)`](#function-seq-p46)
+    * R [Function `outer(...)`](#function-outer-p46)
+    * R [Functions `contour(...)`, `image(...)` and `persp(...)`](#functions-contour-image-and-persp-p46)
 
 ---
 
@@ -361,7 +368,7 @@ SAS/IML will not add an *n*×1 matrix and a 1×*p* matrix.
 
 ---
 
-### Functions: `ls(...)` and `rm(...)` (p.43)
+### Functions `ls(...)` and `rm(...)` (p.43)
 
 R:
 ```
@@ -464,17 +471,16 @@ SAS result (HTML):
 </table>
 
 The behavior of the SAS/IML declaration seems to mimic the `byrow=TRUE` option 
-in the R `matrix()` method. Which elements go to which row and column are 
+in the R `matrix(...)` method. Which elements go to which row and column are 
 controlled by where commas are placed. Documentation 
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_workmatrix_sect002.htm&docsetVersion=14.3&locale=en).
 
-There is no built-in `matrix()` function in SAS/IML. [*3]
-
-> [*3] Needs verification
+The closest equivalent in SAS/IML is the `j(...)` function. Documentation
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect204.htm&docsetVersion=14.3&locale=en).
 
 ---
 
-### Function `sqrt()` (p.44)
+### Function `sqrt(...)` (p.44)
 
 R:
 ```
@@ -565,14 +571,15 @@ SAS result (HTML):
 </table>
 
 The elementwise power operator (`##` in `m ## s`) raises each element in matrix 
-`m` to the scalar `s`-th power.
+`m` to the scalar `s`-th power. Documentation
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect045.htm&docsetVersion=14.3&locale=en).
 
 The caret operator in SAS/IML is a prefix operator for logical NOT. 
 Documentation 
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect042.htm&docsetVersion=14.3&locale=en).
 
-SAS/IML also has a matrix power operator (`**` in `m ** p`), which multiples a 
-matrix `m` by itself `p` times. Documentation 
+SAS/IML also has a matrix power operator (`**` in `m ** s`), which multiples a 
+matrix `m` by itself `s` times. Documentation 
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect046.htm&docsetVersion=14.3&locale=en).
 
 ### Random numbers in normal distribution (p.45)
@@ -627,12 +634,13 @@ There is also `randnormal(n, mean, cov)` that has a different third parameter.
 Documentation 
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect375.htm&docsetVersion=14.3&locale=en).
 
-The `corr(...)` function accepts a matrix and outputs a matrix. The 
-function does not accept mutiple vectors as in R. Multiple vectors must be 
-combined into a *m*×*p* matrix. Documentation 
+The `corr(...)` function computes a *sample* correlation. Accepts a matrix and 
+outputs a matrix. The function does not accept mutiple vectors as in R. 
+Multiple vectors must be combined into a *m*×*p* matrix. Documentation 
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect085.htm&docsetVersion=14.3&locale=en).
 
-To put the column vectors x and y into once matrix they were concatenated using the horizontal concatenation operator `||`. Documentation 
+To put the column vectors x and y into once matrix they were concatenated using 
+the horizontal concatenation operator `||`. Documentation 
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect032.htm&docsetVersion=14.3&locale=en).
 
 ---
@@ -815,5 +823,455 @@ SAS result (HTML):
 ---
 
 ### Functions `mean(...)`, `var(...)` and `sd(...)` (p.45)
+
+Note that these examples uses random number generators and will have different 
+results.
+
+R:
+```
+> set.seed(3)
+> y=rnorm(100)
+> mean(y)
+[1] 0.0110
+> var(y)
+[1] 0.7329
+> sqrt(var(y))
+[1] 0.8561
+> sd(y)
+[1] 0.8561
+```
+
+SAS code:
+```sas
+proc iml;
+    call randseed(3);
+    y = randfun(100, "Normal");
+
+    a = mean(y);
+    print "sample mean" a;
+
+    a = var(y);
+    print "sample variance" a;
+
+    a = std(y);
+    print "sample standard deviation" a;
+
+quit;
+```
+
+SAS results (HTML):
+<table class="table" rules="all" frame="box" summary="Procedure IML: a" cellspacing="0" cellpadding="5" bordercolor="#C1C1C1">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="c headerempty" scope="col">&nbsp;</th>
+<th class="r b header" scope="col">a</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="l data">sample mean</td>
+<td class="r data" nowrap="">-0.168063</td>
+</tr>
+</tbody>
+</table>
+
+<table class="table" rules="all" frame="box" summary="Procedure IML: a" cellspacing="0" cellpadding="5" bordercolor="#C1C1C1">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="c headerempty" scope="col">&nbsp;</th>
+<th class="r b header" scope="col">a</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="l data">sample variance</td>
+<td class="r data">1.2183335</td>
+</tr>
+</tbody>
+</table>
+
+<table class="table" rules="all" frame="box" summary="Procedure IML: a" cellspacing="0" cellpadding="5" bordercolor="#C1C1C1">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="c headerempty" scope="col">&nbsp;</th>
+<th class="r b header" scope="col">a</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="l data">sample standard deviation</td>
+<td class="r data">1.1037815</td>
+</tr>
+</tbody>
+</table>
+
+The three R functions showcased have built-in parrallels in SAS/IML:
+
+Sample mean `mean(m, method, param)` documentation
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect253.htm&docsetVersion=14.3&locale=en).
+
+Sample variance `var(m))` documentation
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect525.htm&docsetVersion=14.3&locale=en).
+
+Sample standard deviation `std(m))` documentation
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect466.htm&docsetVersion=14.3&locale=en).
+
+---
+
+## 2.3.2 Graphics
+
+---
+
+### Function `plot(...)` (p.45)
+
+R:
+```
+> x=rnorm(100)
+> y=rnorm(100)
+> plot(x,y)
+```
+
+R display:
+
+![iml2-plot1-r.png](iml2-plot1-r.png)
+
+SAS code:
+```sas
+proc iml;
+    x = randfun(100, "Normal");
+    y = randfun(100, "Normal");
+    run scatter(x, y);
+quit;
+```
+
+SAS results (SAS Studio screenshot):
+
+![iml2-plot1-sas.png](iml2-plot1-sas.png)
+
+R:
+```
+> plot(x,y,xlab="this is the x-axis",ylab="this is the y-axis", main="Plot of X vs Y")
+```
+
+R display:
+
+![iml2-plot2-r.png](iml2-plot2-r.png)
+
+SAS code:
+```sas
+proc iml;
+    x = randfun(100, "Normal");
+    y = randfun(100, "Normal");
+    
+    title "Plot of X vs Y";
+    run scatter(x, y) label={"this is the x-axis" "is is the y-axis"};
+    title;    * clears the title text ;
+quit;
+```
+
+SAS result (SAS Studio screenshot):
+
+![iml2-plot2-sas.png](iml2-plot2-sas.png)
+
+The SAS/IML `scatter(...)` call uses an underlying `proc sgplot` but *"is not a 
+comprehensive interface to the SGPLOT procedure"*. Documentation
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect423.htm&docsetVersion=14.3&locale=en).
+
+More complex graphs must be done outside of `proc iml`.
+
+
+---
+
+### Saving graphs (p.46)
+
+In this section, paths have been truncated.
+
+R:
+```
+> pdf("Figure.pdf")
+> plot(x,y,col="green")
+> dev.off()
+```
+
+R output (PDF viewer screenshot):
+
+![iml2-plot3-r.png](iml2-plot3-r.png)
+
+SAS code:
+```sas
+ods pdf file='Figure.pdf';
+
+proc iml;
+    x = randfun(100, "Normal");
+    y = randfun(100, "Normal");
+    
+    run scatter(x, y) option="markerattrs=(color=green)";
+quit;
+
+ods pdf close;
+```
+
+SAS result (PDF viewer screenshot):
+
+![iml2-plot3-sas.png](iml2-plot3-sas.png)
+
+Controlling the output destination and file type occurs outside of the `proc iml` code 
+block. 
+<br/>
+ODS statements are not part of SAS/IML.
+
+---
+
+### Function `seq(...)` (p.46)
+
+R:
+```
+> x=seq(1,10)
+> x
+[1] 1 2 3 4 5 6 7 8 9 10
+> x=1:10
+> x
+[1] 1 2 3 4 5 6 7 8 9 10
+```
+
+SAS code:
+```sas
+proc iml;
+    x = {};            * an empty matrix ;
+    
+    do i = 1 to 10;
+        x = x // i;    * row concatenation ;
+    end;
+    
+    print x;
+quit;
+```
+
+SAS result (HTML):
+<table class="table" rules="all" frame="box" summary="Procedure IML: x" cellspacing="0" cellpadding="5" bordercolor="#C1C1C1">
+<colgroup>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="c b header" scope="col">x</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="r data">1</td>
+</tr>
+<tr>
+<td class="r data">2</td>
+</tr>
+<tr>
+<td class="r data">3</td>
+</tr>
+<tr>
+<td class="r data">4</td>
+</tr>
+<tr>
+<td class="r data">5</td>
+</tr>
+<tr>
+<td class="r data">6</td>
+</tr>
+<tr>
+<td class="r data">7</td>
+</tr>
+<tr>
+<td class="r data">8</td>
+</tr>
+<tr>
+<td class="r data">9</td>
+</tr>
+<tr>
+<td class="r data">10</td>
+</tr>
+</tbody>
+</table>
+
+There is no SAS/IML direct equivalent for R's `seq(...)` function or the colon (`:`) 
+operator. The `seq(...)` call available in SAS/IML "compute[s] the probability from a 
+sequential test". Documentation
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect424.htm&docsetVersion=14.3&locale=en).
+
+As an alternative, number sequences can be created using a DO loop. Documentation 
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_programstatements_sect006.htm&docsetVersion=14.3&locale=en).
+
+In the above SAS code, declaring an empty matrix is not required but added for readability.
+
+---
+
+### Function `outer(...)`  (p.46)
+
+R:
+```
+> x=seq(-pi,pi,length=50)
+> y=x
+> f=outer(x,y,function (x,y)cos(y)/(1+x^2))
+```
+
+R display (screenshot of `fix(f)`, showing 19x6 of a 50x50 matrix):
+
+![iml2-outer1-r.png](iml2-outer1-r.png)
+
+> TODO These *is* an outer product operator in sas, but it does not support custom functions
+
+SAS code:
+```sas
+proc iml;
+
+    x = {};                              * an empty matrix;
+    
+    * create 50 numbers of [-π, π] ;
+    count = 50;
+    pi = constant("pi");
+    inc = (pi - (-pi)) / (count - 1);    
+    do i = -pi to pi by inc;
+        x = x // i;                      * row concatenation ;
+    end;
+    
+    * x now has 50 numbers from -π to π, inclusive ;
+
+    y = x;
+
+    f = j(count, count, 0);              * creates a 50*50 matrix where each element = 0 ;
+    
+    * the cross product for vectors x and y will be applied to f ;    
+    * apply custom function cos(y)/(1+x^2) ;
+    do i = 1 to count;
+        do j = 1 to count;
+            f[i,j] = cos(y[j]) / (1 + x[i] ## 2);
+        end;
+    end;
+    
+    * f now has results of cross product of x and y with function cos(y)/(1+x^2) ;
+
+quit;
+```
+
+SAS result (SAS Studio screenshot of `print f`, showing 19x6 of a 50x50 matrix):
+
+![iml2-outer1-sas.png](iml2-outer1-sas.png)
+
+The SAS/IML constant for pi is loaded using the `constant("name")` function. Documentation
+[here](https://blogs.sas.com/content/iml/2012/01/23/constants-in-sas.html).
+
+Creating 50 numbers from -pi to pi inclusive used a `DO` loop with a custom increment in 
+the `BY` clause.
+
+The declaration for `x` containing an empty matrix is not required, but the declaration for 
+`f` is required so the member access in the nested `DO` loop can work.
+
+---
+
+### Functions `contour(...)`, `image(...)` and `persp(...)` (p.46)
+
+R:
+```
+> contour(x,y,f)
+> contour (x,y,f,nlevels=45,add=T)
+> fa=(f-t(f))/2
+> contour(x,y,fa,nlevels=15)
+> image(x,y,fa)
+> persp(x,y,fa)
+```
+
+R output (only for `contour(x,y,f)`):
+
+![iml2-contour1-r.png](iml2-contour1-r.png)
+
+SAS/IML does not have a parallel for R's `countour(...)`, `image(...)` and `persp(...)` 
+functions like SAS/IML's `scatter(...)` for R's `plot(...)`.
+
+These graphs may be created using other SAS products outside of SAS/IML. However, it is 
+possible to use these statements inside the `proc iml` code block. Documentation
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_graphics_sect002.htm&docsetVersion=14.3&locale=en).
+
+These features outside of SAS/IML may need to have their input data in a dataset instead of 
+a matrix. Below is an example of using `proc plot` to recreate R's `contour(...)`. This 
+method allows levels 1 to 10, `nlevels=15` cannot be reproduced. 
+
+SAS code:
+```sas
+proc iml;
+
+    x = {};                                            * an empty matrix;
+    
+    * create 50 numbers of [-π, π] ;
+    count = 50;
+    pi = constant("pi");
+    inc = (pi - (-pi)) / (count - 1);    
+    do i = -pi to pi by inc;
+        x = x // i;                                    * row concatenation ;
+    end;
+    
+    * x now has 50 numbers from -π to π, inclusive ;
+
+    y = x;
+
+    *f = j(count, count, 0);              
+    f = {};                                            * empty instead of a 50x50 matrix ;
+    
+    * the cross product for vectors x and y will be applied to f ;    
+    * apply custom function cos(y)/(1+x^2) ;
+    do i = 1 to count;
+        do j = 1 to count;
+            * f[i,j] = cos(y[j]) / (1 + x[i] ## 2);    * not a matrix anymore;
+            f = f // (x[i] || y[j] || cos(y[j]) / (1 + x[i] ## 2));
+        end;
+    end;
+    
+    * f is now a 2500x3 matrix ;
+    
+    * create a dataset for use in proc gcontour ;
+    create Example from f[colname={"X" "Y" "F"}]; 
+        append from f;
+    close Example;
+    
+    submit;
+        proc plot data=Example;
+            plot y*x=f / contour=10;
+        run;
+    endsubmit;
+
+quit;
+```
+
+SAS result (SAS Studio screenshot):
+
+![iml2-contour1-sas.png](iml2-contour1-sas.png)
+
+Note the following:
+* the 50x50 matrix needs to be in a 2500x3 dataset in order to be used outside of `proc iml`
+* `proc plot` did not produce contour lines
+* `proc plot` approximated graph areas into characters
+
+Alternative methods may render better-looking plots.
+
+Alternatives:
+* For `contour(...)` and `image(...)`
+    * SAS/BASE `proc plot` [[doc]](https://documentation.sas.com/?docsetId=proc&docsetTarget=n0ea8hubm3lupxn12ev3ohujbn37.htm&docsetVersion=9.4&locale=en)
+    * SAS ODS Graphics `proc template` & `proc sgrender` (GTL `contourplotparm`) [[post]](https://blogs.sas.com/content/iml/2012/07/02/create-a-contour-plot-in-sas.html)
+    * SAS/GRAPH `proc gcontour` [[doc]]()
+* For `persp(...)` 
+    * SAS/GRAPH `proc g3d` [[doc]](https://documentation.sas.com/?docsetId=graphref&docsetVersion=9.4&docsetTarget=n17v6b90qsbjz1n16wqtuol0pic5.htm&locale=en)
+
+> SAS/GRAPH procedures are not available in SAS Univeristy Edition
+
+---
 
 > TODO
