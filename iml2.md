@@ -33,7 +33,7 @@ It is possible to submit R statements in `proc iml`. However, such a feature
 must be enabled since it does not work out of the box. See documentation 
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_r_sect001.htm&docsetVersion=14.3&locale=en).
 
-**SAS Univeristy Edition**<br/>
+**SAS University Edition**<br/>
 The documentation explicitly states that:
 >You cannot call R from the free SAS University Edition. The SAS University 
 >Edition runs on a virtual machine that does not have R installed.
@@ -427,7 +427,7 @@ SAS result (HTML):
 </tbody>
 </table>
 
-In SAS/IML, the syntax for explicit declarationis the same for matrices, 
+In SAS/IML, the syntax for explicit declaration is the same for matrices, 
 vectors and scalars. Note how spaces and commas in the SAS/IML declaration 
 arrange the items in the resulting matrix.
 
@@ -475,8 +475,8 @@ in the R `matrix(...)` method. Which elements go to which row and column are
 controlled by where commas are placed. Documentation 
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_workmatrix_sect002.htm&docsetVersion=14.3&locale=en).
 
-The closest equivalent in SAS/IML is the `j(...)` function. Documentation
-[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect204.htm&docsetVersion=14.3&locale=en).
+The closest equivalent in SAS/IML is the `shape(...)` function. Documentation
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect441.htm&docsetVersion=14.3&locale=en).
 
 ---
 
@@ -1108,6 +1108,11 @@ operator. The `seq(...)` call available in SAS/IML "compute[s] the probability f
 sequential test". Documentation
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect424.htm&docsetVersion=14.3&locale=en).
 
+> TODO For the `seq(...)` function see the [do(...) function](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect114.htm&docsetVersion=14.3&locale=en),
+> however the third parameter is still the increment and not the vector length
+
+> TODO For the colon notation, see [index vectors](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_workmatrix_sect014.htm&docsetVersion=14.3&locale=en)
+
 As an alternative, number sequences can be created using a DO loop. Documentation 
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_programstatements_sect006.htm&docsetVersion=14.3&locale=en).
 
@@ -1163,6 +1168,8 @@ proc iml;
 quit;
 ```
 
+> TODO Use the [do(...) function](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_workmatrix_sect014.htm&docsetVersion=14.3&locale=en)
+
 SAS result (SAS Studio screenshot of `print f`, showing 19x6 of a 50x50 matrix):
 
 ![iml2-outer1-sas.png](iml2-outer1-sas.png)
@@ -1194,7 +1201,7 @@ R output (only for `contour(x,y,f)`):
 
 ![iml2-contour1-r.png](iml2-contour1-r.png)
 
-SAS/IML does not have a parallel for R's `countour(...)`, `image(...)` and `persp(...)` 
+SAS/IML does not have parallels for R's `contour(...)`, `image(...)` and `persp(...)` 
 functions like SAS/IML's `scatter(...)` for R's `plot(...)`.
 
 These graphs may be created using other SAS products outside of SAS/IML. However, it is 
@@ -1202,8 +1209,9 @@ possible to use these statements inside the `proc iml` code block. Documentation
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_graphics_sect002.htm&docsetVersion=14.3&locale=en).
 
 These features outside of SAS/IML may need to have their input data in a dataset instead of 
-a matrix. Below is an example of using `proc plot` to recreate R's `contour(...)`. This 
-method allows levels 1 to 10, `nlevels=15` cannot be reproduced. 
+a matrix. Below is an example of using `proc plot` to recreate `contour(x,y,f)` in the R 
+code section above. This method only allows levels 1 to 10, `nlevels=45` cannot be 
+reproduced. 
 
 SAS code:
 ```sas
@@ -1270,8 +1278,8 @@ Alternatives:
 * For `persp(...)` 
     * SAS/GRAPH `proc g3d` [[doc]](https://documentation.sas.com/?docsetId=graphref&docsetVersion=9.4&docsetTarget=n17v6b90qsbjz1n16wqtuol0pic5.htm&locale=en)
 
-> SAS/GRAPH procedures are not available in SAS Univeristy Edition
+> SAS/GRAPH procedures are not available in SAS University Edition
 
 ---
 
-> TODO
+> TODO See [subscripts](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_workmatrix_sect019.htm&docsetVersion=14.3&locale=en)
