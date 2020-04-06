@@ -12,7 +12,7 @@ The *Lab* sections of ISLR 7th printing will be used as basis.
     * SAS/IML [Row vectors vs column vectors](#row-vectors-vs-column-vectors)
     * R [Getting the vector length](#getting-the-vector-length-p.43)
     * R [Vector addition](#vector-addition-p.43)
-    * R [Functions `ls(⋯)` and `rm(⋯)`](#functions-ls⋯-and-rm⋯-p.43)
+    * R [Functions `ls(⋯)` and `rm(⋯)`](#functions-ls-and-rm-p.43)
     * R [Making a matrix](#making-a-matrix-p.44)
     * R [Function `sqrt(⋯)`](#function-sqrt⋯-p.44)
     * R [Caret operator (`^`)](#caret-operator-^-p.45)
