@@ -7,7 +7,7 @@ where it doesn't. This is NOT intended to be a tutorial of any sort.
 The *Lab* sections of ISLR 7th printing will be used as basis.
 
 ## Contents
-* ISLR [2.3.1 Basic Commands](#2.3.1-Basic-Commands)
+* ISLR [2.3.1 Basic Commands](#231-Basic-Commands)
     * R [Declaring a vector](#declaring-a-vector-p43)
     * SAS/IML [Row vectors vs column vectors](#row-vectors-vs-column-vectors)
     * R [Getting the vector length](#getting-the-vector-length-p43)
@@ -15,22 +15,22 @@ The *Lab* sections of ISLR 7th printing will be used as basis.
     * R [Functions `ls()` and `rm()`](#functions-ls-and-rm-p43)
     * R [Making a matrix](#making-a-matrix-p44)
     * R [Function `sqrt()`](#function-sqrt-p44)
-    * R [Caret operator (`^`)](#caret-operator-^-p45)
+    * R [Caret operator (`^`)](#caret-operator--p45)
     * R [Random numbers in normal distribution](#random-numbers-in-normal-distribution-p45)
-    * R [Function `set.seed()`](#function-set.seed-p45)
+    * R [Function `set.seed()`](#function-setseed-p45)
     * R [Functions `mean()`, `var()` and `sd()`](#functions-mean-var-and-sd-p45)
-* ISLR [2.3.2 Graphics](#2.3.2-Graphics)
+* ISLR [2.3.2 Graphics](#232-Graphics)
     * R [Function `plot()`](#function-plot-p45)
     * R [Saving graphs](#saving-graphs-p46)
     * R [Function `seq()`](#function-seq-p46)
     * R [Function `outer()`](#function-outer-p46)
     * R [Functions `contour()`, `image()` and `persp()`](#functions-contour-image-and-persp-p46)
-* ISLR [2.3.3 Indexing Data](#2.3.3-indexing-data)
+* ISLR [2.3.3 Indexing Data](#233-indexing-data)
     * R [Member access](#member-access-p47)
     * SAS/IML [Function `t()` (used in *Member access* example)](#member-access-p47)
     * R [Function `dim()`](#function-dim-p48)
-* ISLR [2.3.4 Loading Data](#2.3.4-loading-data)
-    * R [Function `read.table()`](#function-read.table-p48)
+* ISLR [2.3.4 Loading Data](#234-loading-data)
+    * R [Function `read.table()`](#function-readtable-p48)
 
 
 
