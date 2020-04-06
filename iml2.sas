@@ -139,8 +139,46 @@ proc iml;
 
 quit;
 
+proc iml;
+
+	a = t(shape(1:16, 4, 4));
+	print a;
+	
+	b = a[2, 3];
+	print b;
+	
+	b = a[{1 3}, {2 4}];
+	print b;
+	
+	b = a[1:3, 2:4];
+	print b;
+	
+	b = a[1:2, ];
+	print b;
+	
+	b = a[, 1:2];
+	print b;
+	
+	b = a[1, ];
+	print b;
+	
+	b = a[{-1 -3}];
+	print b;
+	
+	d = dimension(a);
+	print d;
+
+quit;
+
 */
 
+proc iml;
+
+	infile '/folders/myshortcuts/test/Auto.data';
+	
+	
+
+quit;
 
 ods html close;
 
