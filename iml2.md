@@ -7,30 +7,30 @@ where it doesn't. This is NOT intended to be a tutorial of any sort.
 The *Lab* sections of ISLR 7th printing will be used as basis.
 
 ## Contents
-* ISLR [2.3.1 Basic Commands](#2.3.1-Basic-Commands)
-    * R [Declaring a vector](#declaring-a-vector-p.43)
+* ISLR [2.3.1 Basic Commands](#231-Basic-Commands)
+    * R [Declaring a vector](#declaring-a-vector-p43)
     * SAS/IML [Row vectors vs column vectors](#row-vectors-vs-column-vectors)
-    * R [Getting the vector length](#getting-the-vector-length-p.43)
-    * R [Vector addition](#vector-addition-p.43)
-    * R [Functions `ls(⋯)` and `rm(⋯)`](#functions-ls⋯-and-rm⋯-p.43)
-    * R [Making a matrix](#making-a-matrix-p.44)
-    * R [Function `sqrt(⋯)`](#function-sqrt⋯-p.44)
-    * R [Caret operator (`^`)](#caret-operator-^-p.45)
-    * R [Random numbers in normal distribution](#random-numbers-in-normal-distribution-p.45)
-    * R [Function `set.seed(⋯)`](#function-set.seed⋯-p.45)
-    * R [Functions `mean(⋯)`, `var(⋯)` and `sd(⋯)`](#functions-mean-var-and-sd-p.45)
-* ISLR [2.3.2 Graphics](#2.3.2-Graphics)
-    * R [Function `plot(⋯)`](#function-plot⋯-p.45)
-    * R [Saving graphs](#saving-graphs-p.46)
-    * R [Function `seq(⋯)`](#function-seq⋯-p.46)
-    * R [Function `outer(⋯)`](#function-outer⋯-p.46)
-    * R [Functions `contour(⋯)`, `image(⋯)` and `persp(⋯)`](#functions-contour⋯-image⋯-and-persp⋯-p.46)
-* ISLR [2.3.3 Indexing Data](#2.3.3-indexing-data)
-    * R [Member access](#member-access-p.47)
-    * SAS/IML [Function `t(⋯)` (used in *Member access* example)](#member-access-p.47)
-    * R [Function `dim(⋯)`](#function-dim⋯-p.48)
-* ISLR [2.3.4 Loading Data](#2.3.4-loading-data)
-    * R [Function `read.table(⋯)`](#function-read.table⋯-p.48)
+    * R [Getting the vector length](#getting-the-vector-length-p43)
+    * R [Vector addition](#vector-addition-p43)
+    * R [Functions `ls()` and `rm()`](#functions-ls-and-rm-p43)
+    * R [Making a matrix](#making-a-matrix-p44)
+    * R [Function `sqrt()`](#function-sqrt-p44)
+    * R [Caret operator (`^`)](#caret-operator--p45)
+    * R [Random numbers in normal distribution](#random-numbers-in-normal-distribution-p45)
+    * R [Function `set.seed()`](#function-setseed-p45)
+    * R [Functions `mean()`, `var()` and `sd()`](#functions-mean-var-and-sd-p45)
+* ISLR [2.3.2 Graphics](#232-Graphics)
+    * R [Function `plot()`](#function-plot-p45)
+    * R [Saving graphs](#saving-graphs-p46)
+    * R [Function `seq()`](#function-seq-p46)
+    * R [Function `outer()`](#function-outer-p46)
+    * R [Functions `contour()`, `image()` and `persp()`](#functions-contour-image-and-persp-p46)
+* ISLR [2.3.3 Indexing Data](#233-indexing-data)
+    * R [Member access](#member-access-p47)
+    * SAS/IML [Function `t()` (used in *Member access* example)](#member-access-p47)
+    * R [Function `dim()`](#function-dim-p48)
+* ISLR [2.3.4 Loading Data](#234-loading-data)
+    * R [Function `read.table()`](#function-readtable-p48)
 
 
 
@@ -377,7 +377,7 @@ SAS/IML will not add an *n*×1 matrix and a 1×*p* matrix.
 
 ---
 
-### Functions `ls(⋯)` and `rm(⋯)` (p.43)
+### Functions `ls()` and `rm()` (p.43)
 
 R:
 ```
@@ -388,7 +388,7 @@ R:
 character (0)
 ```
 
-No parallel SAS/IML codes for `ls(⋯)` and `rm(⋯)` have been found yet.[*2]
+No parallel SAS/IML codes for `ls()` and `rm()` have been found yet.[*2]
 
 > [*2] Needs verification
 
@@ -480,16 +480,16 @@ SAS result (HTML):
 </table>
 
 The behavior of the SAS/IML declaration seems to mimic the `byrow=TRUE` option 
-in the R `matrix(⋯)` method. Which elements go to which row and column are 
+in the R `matrix()` method. Which elements go to which row and column are 
 controlled by where commas are placed. Documentation 
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_workmatrix_sect002.htm&docsetVersion=14.3&locale=en).
 
-The closest equivalent in SAS/IML is the `shape(⋯)` function. Documentation
+The closest equivalent in SAS/IML is the `shape()` function. Documentation
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect441.htm&docsetVersion=14.3&locale=en).
 
 ---
 
-### Function `sqrt(⋯)` (p.44)
+### Function `sqrt()` (p.44)
 
 R:
 ```
@@ -531,7 +531,7 @@ SAS result (HTML):
 </tbody>
 </table>
 
-The `sqrt(m)` function in SAS/IML seems the same as the `sqrt(⋯)` function in 
+The `sqrt(m)` function in SAS/IML seems the same as the `sqrt()` function in 
 R. Documentation 
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect461.htm&docsetVersion=14.3&locale=en).
 
@@ -637,7 +637,7 @@ SAS result (HTML):
 </tbody>
 </table>
 
-The SAS/IML function `randfun(⋯)` may accept other types of distribution 
+The SAS/IML function `randfun()` may accept other types of distribution 
 other than "Normal". Documentation 
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect336.htm&docsetVersion=14.3&locale=en).
 
@@ -645,7 +645,7 @@ There is also `randnormal(n, mean, cov)` that has a different third parameter.
 Documentation 
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect375.htm&docsetVersion=14.3&locale=en).
 
-The `corr(⋯)` function computes a *sample* correlation. Accepts a matrix and 
+The `corr()` function computes a *sample* correlation. Accepts a matrix and 
 outputs a matrix. The function does not accept mutiple vectors as in R. 
 Multiple vectors must be combined into a *m*×*p* matrix. Documentation 
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect085.htm&docsetVersion=14.3&locale=en).
@@ -656,7 +656,7 @@ the horizontal concatenation operator `||`. Documentation
 
 ---
 
-### Function `set.seed(⋯)` (p.45)
+### Function `set.seed()` (p.45)
 
 R:
 ```
@@ -667,7 +667,7 @@ R:
 ```
 
 Note that different builds of R (64-bit vs 32-bit, Windows vs Unix, etc.) may 
-have differences in results. Consecutive calls to `rnorm(⋯)` will move the 
+have differences in results. Consecutive calls to `rnorm()` will move the 
 random number generator forward:
 
 R (additional example):
@@ -745,7 +745,7 @@ SAS result (HTML):
 Note how SAS/IML has a different result from random numbers generated in R even 
 for the same seed value.
 
-The `randseed(⋯)` call will only reset SAS's random number generation only 
+The `randseed()` call will only reset SAS's random number generation only 
 if a true value is passed as a second argument. Documentation
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect379.htm&docsetVersion=14.3&locale=en).
 
@@ -833,7 +833,7 @@ SAS result (HTML):
 
 ---
 
-### Functions `mean(⋯)`, `var(⋯)` and `sd(⋯)` (p.45)
+### Functions `mean()`, `var()` and `sd()` (p.45)
 
 Note that these examples uses random number generators and will have different 
 results.
@@ -945,7 +945,7 @@ Sample standard deviation `std(m))` documentation
 
 ---
 
-### Function `plot(⋯)` (p.45)
+### Function `plot()` (p.45)
 
 R:
 ```
@@ -996,7 +996,7 @@ SAS result (SAS Studio screenshot):
 
 ![iml2-plot2-sas.png](iml2-plot2-sas.png)
 
-The SAS/IML `scatter(⋯)` call uses an underlying `proc sgplot` but *"is not a 
+The SAS/IML `scatter()` call uses an underlying `proc sgplot` but *"is not a 
 comprehensive interface to the SGPLOT procedure"*. Documentation
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect423.htm&docsetVersion=14.3&locale=en).
 
@@ -1045,7 +1045,7 @@ ODS statements are not part of SAS/IML.
 
 ---
 
-### Function `seq(⋯)` (p.46)
+### Function `seq()` (p.46)
 
 R:
 ```
@@ -1118,8 +1118,8 @@ SAS result (HTML):
 
 In the above SAS code, declaring an empty matrix is not required but added for readability.
 
-There is no SAS/IML direct equivalent for R's `seq(⋯)` function. 
-The `seq(⋯)` call available in SAS/IML "compute[s] the probability from a 
+There is no SAS/IML direct equivalent for R's `seq()` function. 
+The `seq()` call available in SAS/IML "compute[s] the probability from a 
 sequential test". Documentation
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect424.htm&docsetVersion=14.3&locale=en).
 
@@ -1136,7 +1136,7 @@ notation. Documentation
 
 ---
 
-### Function `outer(⋯)`  (p.46)
+### Function `outer()`  (p.46)
 
 R:
 ```
@@ -1152,9 +1152,9 @@ R display (screenshot of `fix(f)`, showing 19x6 of a 50x50 matrix):
 SAS/IML supports the operation 
 [direct product](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect034.htm&docsetVersion=14.3&locale=en) 
 (which it equates to Konecker product[*3]) 
-using the binary operator `@`, and will work like `outer(⋯)` when given input 
+using the binary operator `@`, and will work like `outer()` when given input 
 vectors. However, this operation may not give the same result dimensions as 
-`outer(⋯)` and it does not allow for custom functions.
+`outer()` and it does not allow for custom functions.
 
 > [*3] The documentation shows that the operation is actually for the 
 > [Kronecker product](https://en.wikipedia.org/wiki/Kronecker_product).
@@ -1212,7 +1212,7 @@ The declaration for `x` containing an empty matrix is not required, but the decl
 
 ---
 
-### Functions `contour(⋯)`, `image(⋯)` and `persp(⋯)` (p.46)
+### Functions `contour()`, `image()` and `persp()` (p.46)
 
 R:
 ```
@@ -1228,8 +1228,8 @@ R output (only for `contour(x,y,f)`):
 
 ![iml2-contour1-r.png](iml2-contour1-r.png)
 
-SAS/IML does not have parallels for R's `contour(⋯)`, `image(⋯)` and `persp(⋯)` 
-functions like SAS/IML's `scatter(⋯)` for R's `plot(⋯)`.
+SAS/IML does not have parallels for R's `contour()`, `image()` and `persp()` 
+functions like SAS/IML's `scatter()` for R's `plot()`.
 
 These graphs may be created using other SAS products outside of SAS/IML. However, it is 
 possible to use these statements inside the `proc iml` code block. Documentation
@@ -1298,11 +1298,11 @@ Note the following:
 Alternative methods may render better-looking plots.
 
 Alternatives:
-* For `contour(⋯)` and `image(⋯)`
+* For `contour()` and `image()`
     * SAS/BASE `proc plot` [[doc]](https://documentation.sas.com/?docsetId=proc&docsetTarget=n0ea8hubm3lupxn12ev3ohujbn37.htm&docsetVersion=9.4&locale=en)
     * SAS ODS Graphics `proc template` & `proc sgrender` (GTL `contourplotparm`) [[post]](https://blogs.sas.com/content/iml/2012/07/02/create-a-contour-plot-in-sas.html)
     * SAS/GRAPH `proc gcontour` [[doc]]()
-* For `persp(⋯)` 
+* For `persp()` 
     * SAS/GRAPH `proc g3d` [[doc]](https://documentation.sas.com/?docsetId=graphref&docsetVersion=9.4&docsetTarget=n17v6b90qsbjz1n16wqtuol0pic5.htm&locale=en)
 
 > SAS/GRAPH procedures are not available in SAS University Edition
@@ -1399,8 +1399,8 @@ SAS result (HTML):
 </tbody>
 </table>
 
-Note that to reproduce the R output ins SAS/IML the output of the `shape(⋯)` 
-function must be transposed using the `t(⋯)` function.
+Note that to reproduce the R output ins SAS/IML the output of the `shape()` 
+function must be transposed using the `t()` function.
 
 R:
 ```
@@ -1629,7 +1629,7 @@ Subscript documentation [here](https://documentation.sas.com/?docsetId=imlug&doc
 
 ---
 
-### Function `dim(⋯)` (p.48)
+### Function `dim()` (p.48)
 
 R:
 ```
@@ -1678,7 +1678,7 @@ column dimensions of the argument matrix `m`. Documentation
 
 ---
 
-### Function `read.table(⋯)` (p.48)
+### Function `read.table()` (p.48)
 
 R:
 ```
@@ -1693,7 +1693,5 @@ SAS code:
 > TODO
 
 <!--
-middle ellipsis ⋯
-
 > [*4]
 -->
