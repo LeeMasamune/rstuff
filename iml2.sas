@@ -174,14 +174,39 @@ quit;
 
 proc iml;
 
-	infile '/folders/myshortcuts/test/Auto.data';
+	infile '/folders/myshortcuts/test/Auto.data' missover;
 	
+	Auto = {};
 	
-
+	* Read first line as column names ;
+	input _V1 $ _V2 $ _V3 $ _V4 $ _V5 $ _V6 $ _V7 $ _V8 $ _V9 $;
+	
+	names = _V1 || _V2 || _V3 || _V4 || _V5 || _V6 || _V7 || _V8 || _V9;
+	
+	mattrib Auto colname=names;
+	
+	do data;
+		input _V1 $ _V2 $ _V3 $ _V4 $ _V5 $ _V6 $ _V7 $ _V8 $ _V9 $;
+		
+		if _V1 = '?' then _V1 = '';
+		if _V2 = '?' then _V2 = '';
+		if _V3 = '?' then _V3 = '';
+		if _V4 = '?' then _V4 = '';
+		if _V5 = '?' then _V5 = '';
+		if _V6 = '?' then _V6 = '';
+		if _V7 = '?' then _V7 = '';
+		if _V8 = '?' then _V8 = '';
+		if _V9 = '?' then _V9 = '';
+		
+		Auto = Auto // (_V1 || _V2 || _V3 || _V4 || _V5 || _V6 || _V7 || _V8 || _V9) ;
+		
+	end;
+	
+	print Auto;
+ 
 quit;
 
 ods html close;
-
 
 
 

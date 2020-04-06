@@ -2,7 +2,11 @@
 
 This is a record of exploring whether features of R can be reproduced in 
 SAS/IML and so shall provide demonstrations where it does and alternatives 
-where it doesn't. This is NOT intended to be a tutorial of any sort.
+where it doesn't. 
+
+**Equivalent or approximate SAS/IML codes may exist beyond the codes shown in this document.**
+
+This is NOT intended to be a tutorial of any sort.
 
 The *Lab* sections of ISLR 7th printing will be used as basis.
 
@@ -27,7 +31,7 @@ The *Lab* sections of ISLR 7th printing will be used as basis.
     * R [Functions `contour()`, `image()` and `persp()`](#functions-contour-image-and-persp-p46)
 * ISLR [2.3.3 Indexing Data](#233-indexing-data)
     * R [Member access](#member-access-p47)
-    * SAS/IML [Function `t()` (used in *Member access* example)](#member-access-p47)
+    * SAS/IML [Function `t()`](#member-access-p47) (used in *Member access* example)
     * R [Function `dim()`](#function-dim-p48)
 * ISLR [2.3.4 Loading Data](#234-loading-data)
     * R [Function `read.table()`](#function-readtable-p48)
@@ -1668,7 +1672,7 @@ SAS result (HTML):
 </tbody>
 </table>
 
-The parallel SAS/IML `dimension(m)` function returns a row vector for row and 
+The parallel SAS/IML function `dimension(m)` returns a row vector for row and 
 column dimensions of the argument matrix `m`. Documentation 
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect110.htm&docsetVersion=14.3&locale=en);
 
@@ -1685,12 +1689,656 @@ R:
 > Auto=read.table("Auto.data")
 ```
 
+R display (screenshot of `fix(f)`, showing first 19 observations):
+
+![iml2-read.table1-r.png](iml2-read.table1-r.png)
+
 SAS code:
 ```sas
+proc iml;
+
+    infile '/folders/myshortcuts/test/Auto.data' missover;
+    
+    V1 = {};
+    V2 = {};
+    V3 = {};
+    V4 = {};
+    V5 = {};
+    V6 = {};
+    V7 = {};
+    V8 = {};
+    V9 = {};
+    
+    do data;
+    
+        input _V1 $ _V2 $ _V3 $ _V4 $ _V5 $ _V6 $ _V7 $ _V8 $ _V9 $;
+        
+        V1 = V1 // _V1;
+        V2 = V2 // _V2;
+        V3 = V3 // _V3;
+        V4 = V4 // _V4;
+        V5 = V5 // _V5;
+        V6 = V6 // _V6;
+        V7 = V7 // _V7;
+        V8 = V8 // _V8;
+        V9 = V9 // _V9;
+    end;
+    
+    print V1 V2 V3 V4 V5 V6 V7 V8 V9;
+ 
+quit;
 
 ```
 
+SAS result (HTML, showing first 19 observations):
+<table class="table" rules="all" frame="box" summary="Procedure IML: V1_V2_V3_V4_V5_V6_V7_V8_V9" cellspacing="0" cellpadding="5" bordercolor="#C1C1C1">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="l b header" scope="col">V1</th>
+<th class="l b header" scope="col">V2</th>
+<th class="l b header" scope="col">V3</th>
+<th class="l b header" scope="col">V4</th>
+<th class="l b header" scope="col">V5</th>
+<th class="l b header" scope="col">V6</th>
+<th class="l b header" scope="col">V7</th>
+<th class="l b header" scope="col">V8</th>
+<th class="l b header" scope="col">V9</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="l data">mpg</td>
+<td class="l data">cylinders</td>
+<td class="l data">displacement</td>
+<td class="l data">horsepower</td>
+<td class="l data">weight</td>
+<td class="l data">acceleration</td>
+<td class="l data">year</td>
+<td class="l data">origin</td>
+<td class="l data">name</td>
+</tr>
+<tr>
+<td class="l data">18.0</td>
+<td class="l data">8</td>
+<td class="l data">307.0</td>
+<td class="l data">130.0</td>
+<td class="l data">3504.</td>
+<td class="l data">12.0</td>
+<td class="l data">70</td>
+<td class="l data">1</td>
+<td class="l data">"chevrolet</td>
+</tr>
+<tr>
+<td class="l data">15.0</td>
+<td class="l data">8</td>
+<td class="l data">350.0</td>
+<td class="l data">165.0</td>
+<td class="l data">3693.</td>
+<td class="l data">11.5</td>
+<td class="l data">70</td>
+<td class="l data">1</td>
+<td class="l data">"buick</td>
+</tr>
+<tr>
+<td class="l data">18.0</td>
+<td class="l data">8</td>
+<td class="l data">318.0</td>
+<td class="l data">150.0</td>
+<td class="l data">3436.</td>
+<td class="l data">11.0</td>
+<td class="l data">70</td>
+<td class="l data">1</td>
+<td class="l data">"plymouth</td>
+</tr>
+<tr>
+<td class="l data">16.0</td>
+<td class="l data">8</td>
+<td class="l data">304.0</td>
+<td class="l data">150.0</td>
+<td class="l data">3433.</td>
+<td class="l data">12.0</td>
+<td class="l data">70</td>
+<td class="l data">1</td>
+<td class="l data">"amc</td>
+</tr>
+<tr>
+<td class="l data">17.0</td>
+<td class="l data">8</td>
+<td class="l data">302.0</td>
+<td class="l data">140.0</td>
+<td class="l data">3449.</td>
+<td class="l data">10.5</td>
+<td class="l data">70</td>
+<td class="l data">1</td>
+<td class="l data">"ford</td>
+</tr>
+<tr>
+<td class="l data">15.0</td>
+<td class="l data">8</td>
+<td class="l data">429.0</td>
+<td class="l data">198.0</td>
+<td class="l data">4341.</td>
+<td class="l data">10.0</td>
+<td class="l data">70</td>
+<td class="l data">1</td>
+<td class="l data">"ford</td>
+</tr>
+<tr>
+<td class="l data">14.0</td>
+<td class="l data">8</td>
+<td class="l data">454.0</td>
+<td class="l data">220.0</td>
+<td class="l data">4354.</td>
+<td class="l data">9.0</td>
+<td class="l data">70</td>
+<td class="l data">1</td>
+<td class="l data">"chevrolet</td>
+</tr>
+<tr>
+<td class="l data">14.0</td>
+<td class="l data">8</td>
+<td class="l data">440.0</td>
+<td class="l data">215.0</td>
+<td class="l data">4312.</td>
+<td class="l data">8.5</td>
+<td class="l data">70</td>
+<td class="l data">1</td>
+<td class="l data">"plymouth</td>
+</tr>
+<tr>
+<td class="l data">14.0</td>
+<td class="l data">8</td>
+<td class="l data">455.0</td>
+<td class="l data">225.0</td>
+<td class="l data">4425.</td>
+<td class="l data">10.0</td>
+<td class="l data">70</td>
+<td class="l data">1</td>
+<td class="l data">"pontiac</td>
+</tr>
+<tr>
+<td class="l data">15.0</td>
+<td class="l data">8</td>
+<td class="l data">390.0</td>
+<td class="l data">190.0</td>
+<td class="l data">3850.</td>
+<td class="l data">8.5</td>
+<td class="l data">70</td>
+<td class="l data">1</td>
+<td class="l data">"amc</td>
+</tr>
+<tr>
+<td class="l data">15.0</td>
+<td class="l data">8</td>
+<td class="l data">383.0</td>
+<td class="l data">170.0</td>
+<td class="l data">3563.</td>
+<td class="l data">10.0</td>
+<td class="l data">70</td>
+<td class="l data">1</td>
+<td class="l data">"dodge</td>
+</tr>
+<tr>
+<td class="l data">14.0</td>
+<td class="l data">8</td>
+<td class="l data">340.0</td>
+<td class="l data">160.0</td>
+<td class="l data">3609.</td>
+<td class="l data">8.0</td>
+<td class="l data">70</td>
+<td class="l data">1</td>
+<td class="l data">"plymouth</td>
+</tr>
+<tr>
+<td class="l data">15.0</td>
+<td class="l data">8</td>
+<td class="l data">400.0</td>
+<td class="l data">150.0</td>
+<td class="l data">3761.</td>
+<td class="l data">9.5</td>
+<td class="l data">70</td>
+<td class="l data">1</td>
+<td class="l data">"chevrolet</td>
+</tr>
+<tr>
+<td class="l data">14.0</td>
+<td class="l data">8</td>
+<td class="l data">455.0</td>
+<td class="l data">225.0</td>
+<td class="l data">3086.</td>
+<td class="l data">10.0</td>
+<td class="l data">70</td>
+<td class="l data">1</td>
+<td class="l data">"buick</td>
+</tr>
+<tr>
+<td class="l data">24.0</td>
+<td class="l data">4</td>
+<td class="l data">113.0</td>
+<td class="l data">95.00</td>
+<td class="l data">2372.</td>
+<td class="l data">15.0</td>
+<td class="l data">70</td>
+<td class="l data">3</td>
+<td class="l data">"toyota</td>
+</tr>
+<tr>
+<td class="l data">22.0</td>
+<td class="l data">6</td>
+<td class="l data">198.0</td>
+<td class="l data">95.00</td>
+<td class="l data">2833.</td>
+<td class="l data">15.5</td>
+<td class="l data">70</td>
+<td class="l data">1</td>
+<td class="l data">"plymouth</td>
+</tr>
+<tr>
+<td class="l data">18.0</td>
+<td class="l data">6</td>
+<td class="l data">199.0</td>
+<td class="l data">97.00</td>
+<td class="l data">2774.</td>
+<td class="l data">15.5</td>
+<td class="l data">70</td>
+<td class="l data">1</td>
+<td class="l data">"amc</td>
+</tr>
+<tr>
+<td class="l data">21.0</td>
+<td class="l data">6</td>
+<td class="l data">200.0</td>
+<td class="l data">85.00</td>
+<td class="l data">2587.</td>
+<td class="l data">16.0</td>
+<td class="l data">70</td>
+<td class="l data">1</td>
+<td class="l data">"ford</td>
+</tr>
+</tbody>
+</table>
+
+Declaration of empty matrices are not required, but placed for readability.
+
+There is no direct equivalent in SAS/IML for the R function `read.table()`.
+
+To recreate the R code above in SAS/IML:
+* Each variable to be read must be explcitly delcared in the `INPUT` statement
+* The `DO DATA` code block works like a `DATA` step, statements in the code 
+    block are executed per input observation
+* Inputs read are scalars and must be collected if these are to be used outside 
+    of the `DO DATA` code block
+* The SAS code above read the double quote as an input and not as a string 
+    literal delimiter
+
+Other features of `read.table()` must be done through data manipulation.
+
+R:
+```
+> Auto=read.table("Auto.data",header=T,na.strings ="?")
+```
+
+R display (screenshot of `fix(f)`, showing first observations 33-51):
+
+![iml2-read.table2-r.png](iml2-read.table2-r.png)
+
+SAS code:
+```sas
+proc iml;
+
+    infile '/folders/myshortcuts/test/Auto.data' missover;
+    
+    Auto = {};
+    
+    * Read first line as column names ;
+    input _V1 $ _V2 $ _V3 $ _V4 $ _V5 $ _V6 $ _V7 $ _V8 $ _V9 $;
+    
+    * Set matrix column names ;
+    names = _V1 || _V2 || _V3 || _V4 || _V5 || _V6 || _V7 || _V8 || _V9;
+    mattrib Auto colname=names;
+    
+    * Read and collect ;
+    do data;
+        input _V1 $ _V2 $ _V3 $ _V4 $ _V5 $ _V6 $ _V7 $ _V8 $ _V9 $;
+        
+        Auto = Auto // (_V1 || _V2 || _V3 || _V4 || _V5 || _V6 || _V7 || _V8 || _V9) ;
+    end;
+    
+    print Auto;
+ 
+quit;
+```
+
+SAS result (HTML):
+<table class="table" rules="all" frame="box" summary="Procedure IML: Auto" cellspacing="0" cellpadding="5" bordercolor="#C1C1C1">
+<colgroup>
+<col>
+</colgroup>
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="c b header" colspan="10" scope="colgroup">Auto</th>
+</tr>
+<tr>
+<th class="c headerempty" scope="col">&nbsp;</th>
+<th class="l b header" scope="col">mpg</th>
+<th class="l b header" scope="col">cylinders</th>
+<th class="l b header" scope="col">displacement</th>
+<th class="l b header" scope="col">horsepower</th>
+<th class="l b header" scope="col">weight</th>
+<th class="l b header" scope="col">acceleration</th>
+<th class="l b header" scope="col">year</th>
+<th class="l b header" scope="col">origin</th>
+<th class="l b header" scope="col">name</th>
+</tr>
+</thead>
+<tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<tr>
+<th class="l rowheader" scope="row">ROW33</th>
+<td class="l data">25.0</td>
+<td class="l data">4</td>
+<td class="l data">98.00</td>
+<td class="l data">&nbsp;</td>
+<td class="l data">2046.</td>
+<td class="l data">19.0</td>
+<td class="l data">71</td>
+<td class="l data">1</td>
+<td class="l data">"ford</td>
+</tr>
+<tr>
+<th class="l rowheader" scope="row">ROW34</th>
+<td class="l data">19.0</td>
+<td class="l data">6</td>
+<td class="l data">232.0</td>
+<td class="l data">100.0</td>
+<td class="l data">2634.</td>
+<td class="l data">13.0</td>
+<td class="l data">71</td>
+<td class="l data">1</td>
+<td class="l data">"amc</td>
+</tr>
+<tr>
+<th class="l rowheader" scope="row">ROW35</th>
+<td class="l data">16.0</td>
+<td class="l data">6</td>
+<td class="l data">225.0</td>
+<td class="l data">105.0</td>
+<td class="l data">3439.</td>
+<td class="l data">15.5</td>
+<td class="l data">71</td>
+<td class="l data">1</td>
+<td class="l data">"plymouth</td>
+</tr>
+<tr>
+<th class="l rowheader" scope="row">ROW36</th>
+<td class="l data">17.0</td>
+<td class="l data">6</td>
+<td class="l data">250.0</td>
+<td class="l data">100.0</td>
+<td class="l data">3329.</td>
+<td class="l data">15.5</td>
+<td class="l data">71</td>
+<td class="l data">1</td>
+<td class="l data">"chevrolet</td>
+</tr>
+<tr>
+<th class="l rowheader" scope="row">ROW37</th>
+<td class="l data">19.0</td>
+<td class="l data">6</td>
+<td class="l data">250.0</td>
+<td class="l data">88.00</td>
+<td class="l data">3302.</td>
+<td class="l data">15.5</td>
+<td class="l data">71</td>
+<td class="l data">1</td>
+<td class="l data">"ford</td>
+</tr>
+<tr>
+<th class="l rowheader" scope="row">ROW38</th>
+<td class="l data">18.0</td>
+<td class="l data">6</td>
+<td class="l data">232.0</td>
+<td class="l data">100.0</td>
+<td class="l data">3288.</td>
+<td class="l data">15.5</td>
+<td class="l data">71</td>
+<td class="l data">1</td>
+<td class="l data">"amc</td>
+</tr>
+<tr>
+<th class="l rowheader" scope="row">ROW39</th>
+<td class="l data">14.0</td>
+<td class="l data">8</td>
+<td class="l data">350.0</td>
+<td class="l data">165.0</td>
+<td class="l data">4209.</td>
+<td class="l data">12.0</td>
+<td class="l data">71</td>
+<td class="l data">1</td>
+<td class="l data">"chevrolet</td>
+</tr>
+<tr>
+<th class="l rowheader" scope="row">ROW40</th>
+<td class="l data">14.0</td>
+<td class="l data">8</td>
+<td class="l data">400.0</td>
+<td class="l data">175.0</td>
+<td class="l data">4464.</td>
+<td class="l data">11.5</td>
+<td class="l data">71</td>
+<td class="l data">1</td>
+<td class="l data">"pontiac</td>
+</tr>
+<tr>
+<th class="l rowheader" scope="row">ROW41</th>
+<td class="l data">14.0</td>
+<td class="l data">8</td>
+<td class="l data">351.0</td>
+<td class="l data">153.0</td>
+<td class="l data">4154.</td>
+<td class="l data">13.5</td>
+<td class="l data">71</td>
+<td class="l data">1</td>
+<td class="l data">"ford</td>
+</tr>
+<tr>
+<th class="l rowheader" scope="row">ROW42</th>
+<td class="l data">14.0</td>
+<td class="l data">8</td>
+<td class="l data">318.0</td>
+<td class="l data">150.0</td>
+<td class="l data">4096.</td>
+<td class="l data">13.0</td>
+<td class="l data">71</td>
+<td class="l data">1</td>
+<td class="l data">"plymouth</td>
+</tr>
+<tr>
+<th class="l rowheader" scope="row">ROW43</th>
+<td class="l data">12.0</td>
+<td class="l data">8</td>
+<td class="l data">383.0</td>
+<td class="l data">180.0</td>
+<td class="l data">4955.</td>
+<td class="l data">11.5</td>
+<td class="l data">71</td>
+<td class="l data">1</td>
+<td class="l data">"dodge</td>
+</tr>
+<tr>
+<th class="l rowheader" scope="row">ROW44</th>
+<td class="l data">13.0</td>
+<td class="l data">8</td>
+<td class="l data">400.0</td>
+<td class="l data">170.0</td>
+<td class="l data">4746.</td>
+<td class="l data">12.0</td>
+<td class="l data">71</td>
+<td class="l data">1</td>
+<td class="l data">"ford</td>
+</tr>
+<tr>
+<th class="l rowheader" scope="row">ROW45</th>
+<td class="l data">13.0</td>
+<td class="l data">8</td>
+<td class="l data">400.0</td>
+<td class="l data">175.0</td>
+<td class="l data">5140.</td>
+<td class="l data">12.0</td>
+<td class="l data">71</td>
+<td class="l data">1</td>
+<td class="l data">"pontiac</td>
+</tr>
+<tr>
+<th class="l rowheader" scope="row">ROW46</th>
+<td class="l data">18.0</td>
+<td class="l data">6</td>
+<td class="l data">258.0</td>
+<td class="l data">110.0</td>
+<td class="l data">2962.</td>
+<td class="l data">13.5</td>
+<td class="l data">71</td>
+<td class="l data">1</td>
+<td class="l data">"amc</td>
+</tr>
+<tr>
+<th class="l rowheader" scope="row">ROW47</th>
+<td class="l data">22.0</td>
+<td class="l data">4</td>
+<td class="l data">140.0</td>
+<td class="l data">72.00</td>
+<td class="l data">2408.</td>
+<td class="l data">19.0</td>
+<td class="l data">71</td>
+<td class="l data">1</td>
+<td class="l data">"chevrolet</td>
+</tr>
+<tr>
+<th class="l rowheader" scope="row">ROW48</th>
+<td class="l data">19.0</td>
+<td class="l data">6</td>
+<td class="l data">250.0</td>
+<td class="l data">100.0</td>
+<td class="l data">3282.</td>
+<td class="l data">15.0</td>
+<td class="l data">71</td>
+<td class="l data">1</td>
+<td class="l data">"pontiac</td>
+</tr>
+<tr>
+<th class="l rowheader" scope="row">ROW49</th>
+<td class="l data">18.0</td>
+<td class="l data">6</td>
+<td class="l data">250.0</td>
+<td class="l data">88.00</td>
+<td class="l data">3139.</td>
+<td class="l data">14.5</td>
+<td class="l data">71</td>
+<td class="l data">1</td>
+<td class="l data">"ford</td>
+</tr>
+<tr>
+<th class="l rowheader" scope="row">ROW50</th>
+<td class="l data">23.0</td>
+<td class="l data">4</td>
+<td class="l data">122.0</td>
+<td class="l data">86.00</td>
+<td class="l data">2220.</td>
+<td class="l data">14.0</td>
+<td class="l data">71</td>
+<td class="l data">1</td>
+<td class="l data">"mercury</td>
+</tr>
+<tr>
+<th class="l rowheader" scope="row">ROW51</th>
+<td class="l data">28.0</td>
+<td class="l data">4</td>
+<td class="l data">116.0</td>
+<td class="l data">90.00</td>
+<td class="l data">2123.</td>
+<td class="l data">14.0</td>
+<td class="l data">71</td>
+<td class="l data">2</td>
+<td class="l data">"opel</td>
+</tr>
+</tbody>
+</table>
+
+To reproduce the effect of the `header=T` argument, the first observation was 
+set as column names in a separate `INPUT` statement and then used in the 
+`MATTRIB` statement. Documentation
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect267.htm&docsetVersion=15.1&locale=en).
+
+To reproduce the effect of the `strings="?"` argument,
+
 > TODO
+
+SAS/IML file access documentation
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_fileaccess_toc.htm&docsetVersion=14.3&locale=en).
+
+---
+
+### Function `read.csv()` (p.49)
+
+> TODO
+
+SAS/IML file access documentation
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_fileaccess_toc.htm&docsetVersion=14.3&locale=en).
+
+> WIP
 
 <!--
 > [*4]
