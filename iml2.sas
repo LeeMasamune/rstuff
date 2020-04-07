@@ -170,11 +170,9 @@ proc iml;
 
 quit;
 
-*/
-
 proc iml;
 
-	infile '/folders/myshortcuts/test/Auto.data' missover;
+	infile '/folders/myshortcuts/test/Auto.csv' dsd missover;
 	
 	Auto = {};
 	
@@ -205,6 +203,58 @@ proc iml;
 	print Auto;
  
 quit;
+
+* 	Import CSV data to dataset                                                  ;
+*   '?' under columns inferred as numeric will be treated as null               ;
+*       and an error message will be logged                                     ;
+proc import dbms=csv file='/folders/myshortcuts/test/Auto.csv' out=AUTO replace;
+run;
+
+* Remove observations with null data ;
+data Auto;
+	set Auto;    * This is a rewrite ;
+	
+	_hasNull = 0;
+	
+	array nums{*} _numeric_;
+	array chars{*} _character_;
+	
+	do i = 1 to dim(nums);
+		if nums{i} = . then do;
+			_hasNull = 1;
+			leave;
+		end;
+	end;
+	
+	do i = 1 to dim(chars);
+		if chars{i} = '' then do;
+			_hasNull = 1;
+			leave;
+		end;
+	end;
+	
+	if _hasNull then do;
+		putlog "NOTE: NULL detected " _all_;
+		delete;
+	end;
+	
+	drop i _hasNull;
+run;
+
+proc iml;
+
+	* Load dataset data to matrices ;
+	use Auto;
+	read all var {cylinders mpg};
+	close Auto;
+	
+	*call box(mpg) category=cylinders;
+	call histogram(mpg);
+ 
+quit;
+
+*/
+
 
 ods html close;
 
