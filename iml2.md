@@ -35,8 +35,14 @@ The *Lab* sections of ISLR 7th printing will be used as basis.
     * R [Function `dim()`](#function-dim-p48)
 * ISLR [2.3.4 Loading Data](#234-loading-data)
     * R [Function `read.table()`](#function-readtable-p48)
-
-
+    * R [Function `read.csv()`](#function-readcsv-p49)
+    * R [Function `na.omit()`](#function-naomit-p49)
+    * R [Function `names()`](#function-names-p49)
+    * R [Function `attach()`](#function-attach-p50)
+    * R [Function `as.factor()`](#function-asfactor-p50)
+    * R [Boxplots](#boxplots-p50)
+    * R [Function `hist()`](#function-hist-p50)
+    * R [Function `pairs()`](#function-pairs-p50)
 
 ---
 
@@ -2054,38 +2060,6 @@ SAS result (HTML):
 </tr>
 </thead>
 <tbody>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <tr>
 <th class="l rowheader" scope="row">ROW33</th>
 <td class="l data">25.0</td>
@@ -2322,9 +2296,8 @@ set as column names in a separate `INPUT` statement and then used in the
 `MATTRIB` statement. Documentation
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect267.htm&docsetVersion=15.1&locale=en).
 
-To reproduce the effect of the `strings="?"` argument,
-
-> TODO
+To reproduce the effect of the `strings="?"` argument, each variable is 
+checked if it contains '?' value and set to SAS String Null (`''`) if it is.
 
 SAS/IML file access documentation
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_fileaccess_toc.htm&docsetVersion=14.3&locale=en).
@@ -2333,13 +2306,199 @@ SAS/IML file access documentation
 
 ### Function `read.csv()` (p.49)
 
-> TODO
+R:
+```
+> Auto=read.csv("Auto.csv",header=T,na.strings="?")
+```
 
-SAS/IML file access documentation
-[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_fileaccess_toc.htm&docsetVersion=14.3&locale=en).
+There is no direct equivalent in SAS/IML for the R function `read.csv()`, and 
+the `DSD` option (enables reading of "**d**elimiter **s**ensitive **d**ata") is 
+not available for the `INFILE` statement in SAS/IML.
+
+CSV files can be read by other means such as `DATA` step or `proc import`. 
+
+```sas
+* 	Import CSV data to dataset                                                  ;
+*   '?' under columns inferred as numeric will be treated as null               ;
+*       and an error message will be logged                                     ;
+proc import dbms=csv file='Auto.csv' out=AUTO replace;
+run;
+```
+
+`proc import` is not part of SAS/IML.
+
+Datasets must be loaded using `USE` and `READ` statements in a `proc iml` code 
+block. Documentation
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_worksasdatasets_sect003.htm&docsetVersion=14.3&locale=en).
+
+---
+
+### Function `na.omit()` (p.49)
+
+There is no direct equivalent in SAS/IML for the R function `na.omit()`, though the feature it provides may be recreated through data manipulation.
+
+One way is through a `DATA` step, example below.
+
+```sas
+* Remove observations with null data ;
+data Auto;
+	set Auto;    * This is a rewrite ;
+	
+	_hasNull = 0;
+	
+	array nums{*} _numeric_;
+	array chars{*} _character_;
+	
+	do i = 1 to dim(nums);
+		if nums{i} = . then do;
+			_hasNull = 1;
+			leave;
+		end;
+	end;
+	
+	do i = 1 to dim(chars);
+		if chars{i} = '' then do;
+			_hasNull = 1;
+			leave;
+		end;
+	end;
+	
+	if _hasNull then do;
+		putlog "NOTE: NULL detected " _all_;
+		delete;
+	end;
+	
+	drop i _hasNull;
+run;
+```
+
+The `DATA` step is part of SAS/BASE.
+
+---
+
+### Function `names()` (p.49)
+
+There is no direct equivalent in SAS/IML for the R function `names()`. Data 
+loaded form extarnal files expose variable names through either declaration or 
+other means outside of SAS/IML such as `proc contents`.
+
+---
+
+### Function `attach()` (p.50)
+
+The behavior of the R function `attach()` may be approximated by the `READ` 
+statement. Documentation 
+[here](https://documentation.sas.com/?docsetId=imlug&docsetVersion=14.3&docsetTarget=imlug_langref_sect386.htm&locale=en).
+
+---
+
+### Function `as.factor()` (p.50)
+
+There is no parallel SAS/IML codes for the R function `as.factor()`.
+
+---
+
+### Boxplots (p.50)
+
+R:
+```
+> Auto=read.csv("Auto.csv",header=T,na.strings="?")
+> Auto=na.omit(Auto)
+> attach(Auto)
+> cylinders=as.factor(cylinders)
+> plot(cylinders , mpg)
+```
+
+R display (screenshot):
+
+![iml2-boxplot1-r.png](iml2-boxplot1-r.png)
+
+The R function `plot()` is able to determine if the x-axis argument is a 
+factor, and will automatically create a boxplot if it is. In SAS/IML however, 
+the `scatter()` call does not recognize factors, and will always create 
+scatterplots reagrdless of the nature of the inputs.
+
+To create a boxplot, the `box()` call is ued instead.
+
+SAS code:
+```sas
+proc iml;
+
+	* Load dataset data to matrices ;
+	use Auto;
+	read all var {cylinders mpg};
+	close Auto;
+	
+	call box(mpg) category=cylinders;
+ 
+quit;
+```
+
+SAS result (SAS Studio screenshot):
+
+![iml2-boxplot1-sas.png](iml2-boxplot1-sas.png)
+
+Note that the `USE`...`READ`...`CLOSE` statements are required so the data in 
+the Auto dataset can be used in `proc iml`.
+
+SAS/IML `box()` call documentation
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect068.htm&docsetVersion=14.3&locale=en).
+
+---
+
+### Function `hist()` (p.50)
+
+R:
+```
+> hist(mpg)
+```
+
+R display:
+
+![iml2-hist1-r.png](iml2-hist1-r.png)
+
+SAS code:
+```sas
+proc iml;
+
+	* Load dataset data to matrices ;
+	use Auto;
+	read all var {mpg};
+	close Auto;
+	
+	call histogram(mpg);
+ 
+quit;
+
+```
+
+SAS result (SAS Studio screenshot):
+
+![iml2-hist1-sas.png](iml2-hist1-sas.png)
+
+Note that the `USE`...`READ`...`CLOSE` statements are required so the data in 
+the Auto dataset can be used in `proc iml`.
+
+SAS/IML `histogram()` call documentation
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect177.htm&docsetVersion=14.3&locale=en).
+
+---
+
+### Function `pairs()` (p.50)
+
+There is no direct equivalent in SAS/IML for the R function `pairs()`.
+
+proc corr and proc sgscatter
+
+https://blogs.sas.com/content/iml/2011/08/26/visualizing-correlations-between-variables-in-sas.html
+
+something complicated but in sasiml
+
+https://support.sas.com/documentation/cdl/en/imlug/65547/HTML/default/viewer.htm#imlug_graphstart_sect018.htm
 
 > WIP
 
 <!--
 > [*4]
 -->
+
