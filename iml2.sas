@@ -255,6 +255,43 @@ quit;
 
 */
 
+* R > college = read.csv("College.csv") ;
+* R > rownames(college)=college[,1] ;
+* R > college=college[,-1] ;
+
+proc import dbms=csv 
+            file='/folders/myshortcuts/test/College.csv' 
+            out=collegeds
+            replace;
+run;
+
+* Since the first column in College.csv is unnamed, the default name put by SAS is VAR1 ;
+
+* Load the dataset ;
+proc iml;
+
+	use collegeds;
+	read all var { VAR1 } into names; * This picks the first column ;
+	*read all var _all_ into college; * This does not work, variable Private is not loaded ;
+	read all var _num_ into college[colname=varnames]; * This loads all numeric variables in collegds into the college matrix ;
+	read all var { Private } ; * This loads the Private variable into its own vector, default name is also Private ;	
+	close collegeds;
+	
+	mattrib college rowname=names;
+	mattrib Private rowname=names;
+	
+	* R > fix(college) ;
+
+	* SAS Studio can display the table when double clicked but edit not allowed ;
+	* SAS Windowing Environment supports cell edits ;
+
+	print college Private; * The Private vector will be printed separately;
+	
+	* R > summary(college) ;
+	
+	* TODO ;
+
+quit;
 
 ods html close;
 

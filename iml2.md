@@ -43,6 +43,11 @@ The *Lab* sections of ISLR 7th printing will be used as basis.
     * R [Boxplots](#boxplots-p50)
     * R [Function `hist()`](#function-hist-p50)
     * R [Function `pairs()`](#function-pairs-p50)
+    * R [Function `identify()`](#function-identify-p51)
+    * R [Function `summary()` (p.51)](#function-summary-p51)
+* ISLR [2.4 Exercises, *Applied*](#24-exercises-applied)
+    * SAS Codes for Item 8
+
 
 ---
 
@@ -398,7 +403,7 @@ R:
 character (0)
 ```
 
-No parallel SAS/IML codes for `ls()` and `rm()` have been found yet.[*2]
+Corresponding SAS/IML codes for `ls()` and `rm()` are yet to be found.[*2]
 
 > [*2] Needs verification
 
@@ -1238,17 +1243,18 @@ R output (only for `contour(x,y,f)`):
 
 ![iml2-contour1-r.png](iml2-contour1-r.png)
 
-SAS/IML does not have parallels for R's `contour()`, `image()` and `persp()` 
-functions like SAS/IML's `scatter()` for R's `plot()`.
+SAS/IML does not have corresponding codes for R's `contour()`, `image()` and 
+`persp()` functions like SAS/IML's `scatter()` for R's `plot()`.
 
-These graphs may be created using other SAS products outside of SAS/IML. However, it is 
-possible to use these statements inside the `proc iml` code block. Documentation
+These graphs may be created using other SAS products outside of SAS/IML. 
+However, it is possible to use these statements inside the `proc iml` code 
+block. Documentation
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_graphics_sect002.htm&docsetVersion=14.3&locale=en).
 
-These features outside of SAS/IML may need to have their input data in a dataset instead of 
-a matrix. Below is an example of using `proc plot` to recreate `contour(x,y,f)` in the R 
-code section above. This method only allows levels 1 to 10, `nlevels=45` cannot be 
-reproduced. 
+These features outside of SAS/IML may need to have their input data in a 
+dataset instead of a matrix. Below is an example of using `proc plot` to 
+recreate `contour(x,y,f)` in the R code section above. This method only allows 
+levels 1 to 10, `nlevels=45` cannot be reproduced. 
 
 SAS code:
 ```sas
@@ -1678,8 +1684,8 @@ SAS result (HTML):
 </tbody>
 </table>
 
-The parallel SAS/IML function `dimension(m)` returns a row vector for row and 
-column dimensions of the argument matrix `m`. Documentation 
+The corresponding SAS/IML function `dimension(m)` returns a row vector for row 
+and column dimensions of the argument matrix `m`. Documentation 
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect110.htm&docsetVersion=14.3&locale=en);
 
 ---
@@ -2321,7 +2327,7 @@ CSV files can be read by other means such as `DATA` step or `proc import`.
 * 	Import CSV data to dataset                                                  ;
 *   '?' under columns inferred as numeric will be treated as null               ;
 *       and an error message will be logged                                     ;
-proc import dbms=csv file='Auto.csv' out=AUTO replace;
+proc import dbms=csv file='/folders/myshortcuts/test/Auto.csv' out=AUTO replace;
 run;
 ```
 
@@ -2342,37 +2348,39 @@ One way is through a `DATA` step, example below.
 ```sas
 * Remove observations with null data ;
 data Auto;
-	set Auto;    * This is a rewrite ;
-	
-	_hasNull = 0;
-	
-	array nums{*} _numeric_;
-	array chars{*} _character_;
-	
-	do i = 1 to dim(nums);
-		if nums{i} = . then do;
-			_hasNull = 1;
-			leave;
-		end;
-	end;
-	
-	do i = 1 to dim(chars);
-		if chars{i} = '' then do;
-			_hasNull = 1;
-			leave;
-		end;
-	end;
-	
-	if _hasNull then do;
-		putlog "NOTE: NULL detected " _all_;
-		delete;
-	end;
-	
-	drop i _hasNull;
+    set Auto;    * This is a rewrite ;
+    
+    _hasNull = 0;
+    
+    array nums{*} _numeric_;
+    array chars{*} _character_;
+    
+    do i = 1 to dim(nums);
+        if nums{i} = . then do;
+            _hasNull = 1;
+            leave;
+        end;
+    end;
+    
+    do i = 1 to dim(chars);
+        if chars{i} = '' then do;
+            _hasNull = 1;
+            leave;
+        end;
+    end;
+    
+    if _hasNull then do;
+        putlog "NOTE: NULL detected " _all_;
+        delete;
+    end;
+    
+    drop i _hasNull;
 run;
 ```
 
 The `DATA` step is part of SAS/BASE.
+
+Alternative SAS/IML method [here](https://blogs.sas.com/content/iml/2010/09/15/removing-observations-with-missing-values.html).
 
 ---
 
@@ -2394,7 +2402,8 @@ statement. Documentation
 
 ### Function `as.factor()` (p.50)
 
-There is no parallel SAS/IML codes for the R function `as.factor()`.
+Corresponding SAS/IML codes for the R function `as.factor()` are yet to be 
+found.
 
 ---
 
@@ -2424,12 +2433,12 @@ SAS code:
 ```sas
 proc iml;
 
-	* Load dataset data to matrices ;
-	use Auto;
-	read all var {cylinders mpg};
-	close Auto;
-	
-	call box(mpg) category=cylinders;
+    * Load dataset data to matrices ;
+    use Auto;
+    read all var {cylinders mpg};
+    close Auto;
+    
+    call box(mpg) category=cylinders;
  
 quit;
 ```
@@ -2461,12 +2470,12 @@ SAS code:
 ```sas
 proc iml;
 
-	* Load dataset data to matrices ;
-	use Auto;
-	read all var {mpg};
-	close Auto;
-	
-	call histogram(mpg);
+    * Load dataset data to matrices ;
+    use Auto;
+    read all var {mpg};
+    close Auto;
+    
+    call histogram(mpg);
  
 quit;
 
@@ -2488,13 +2497,75 @@ SAS/IML `histogram()` call documentation
 
 There is no direct equivalent in SAS/IML for the R function `pairs()`.
 
-proc corr and proc sgscatter
+Alternatives 
+* Using `proc corr` and `proc sgscatter` this blog [post](https://blogs.sas.com/content/iml/2011/08/26/visualizing-correlations-between-variables-in-sas.html).
+* Something complicated in SAS/IML [here](https://support.sas.com/documentation/cdl/en/imlug/65547/HTML/default/viewer.htm#imlug_graphstart_sect018.htm).
 
-https://blogs.sas.com/content/iml/2011/08/26/visualizing-correlations-between-variables-in-sas.html
+---
 
-something complicated but in sasiml
+### Function `identify()` (p.51)
 
-https://support.sas.com/documentation/cdl/en/imlug/65547/HTML/default/viewer.htm#imlug_graphstart_sect018.htm
+Corresponding SAS/IML codes for the R function `identify()` are yet to be found.
+
+Labelling specific data points in a graph can be done in a non-interactive 
+manner through appropriate options in various graphing statements.
+
+---
+
+### Function `summary()` (p.51)
+
+Corresponding SAS/IML codes for the R function `summary()` are yet to be found.
+
+Printing mininum, maximum, and other summary statistics provided by `summary()` 
+can be done using other SAS products such as `proc freq`.
+
+---
+
+## 2.4 Exercises, *Applied*
+
+---
+
+### Codes for item 8
+
+```sas
+* R > college = read.csv("College.csv") ;
+* R > rownames(college)=college[,1] ;
+* R > college=college[,-1] ;
+
+proc import dbms=csv 
+            file='/folders/myshortcuts/test/College.csv' 
+            out=collegeds
+            replace;
+run;
+
+* Since the first column in College.csv is unnamed, the default name put by SAS is VAR1 ;
+
+* Load the dataset ;
+proc iml;
+
+    use collegeds;
+    read all var { VAR1 } into names; * This picks the first column ;
+    *read all var _all_ into college; * This does not work, variable Private is not loaded ;
+    read all var _num_ into college[colname=varnames]; * This loads all numeric variables in collegds into the college matrix ;
+    read all var { Private } ; * This loads the Private variable into its own vector, default name is also Private ;	
+    close collegeds;
+    
+    mattrib college rowname=names;
+    mattrib Private rowname=names;
+    
+    * R > fix(college) ;
+
+    * SAS Studio can display the table when double clicked but edit not allowed ;
+    * SAS Windowing Environment supports cell edits ;
+
+    print college Private; * The Private vector will be printed separately;
+    
+    * R > summary(college) ;
+    
+    * TODO ;
+
+quit;
+```
 
 > WIP
 
