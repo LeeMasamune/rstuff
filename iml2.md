@@ -46,8 +46,8 @@ The *Lab* sections of ISLR 7th printing will be used as basis.
     * R [Function `identify()`](#function-identify-p51)
     * R [Function `summary()` (p.51)](#function-summary-p51)
 * ISLR [2.4 Exercises, *Applied*](#24-exercises-applied)
-    * SAS Codes for Item 8
-
+    * SAS [Codes for Item 8](#codes-for-item-8)
+    * SAS [Codes for Item 9](#codes-for-item-9) (no IML)
 
 ---
 
@@ -406,6 +406,10 @@ character (0)
 Corresponding SAS/IML codes for `ls()` and `rm()` are yet to be found.[*2]
 
 > [*2] Needs verification
+
+The SAS/IML `SHOW` statement may display exisitng variables in the environment, 
+but there is no way to put the results in a matrix. Documentation
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect443.htm&docsetVersion=14.3&locale=en).
 
 ---
 
@@ -1246,7 +1250,7 @@ R output (only for `contour(x,y,f)`):
 SAS/IML does not have corresponding codes for R's `contour()`, `image()` and 
 `persp()` functions like SAS/IML's `scatter()` for R's `plot()`.
 
-These graphs may be created using other SAS products outside of SAS/IML. 
+These graphs may be created using other SAS features outside of SAS/IML. 
 However, it is possible to use these statements inside the `proc iml` code 
 block. Documentation
 [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_graphics_sect002.htm&docsetVersion=14.3&locale=en).
@@ -2514,10 +2518,47 @@ manner through appropriate options in various graphing statements.
 
 ### Function `summary()` (p.51)
 
-Corresponding SAS/IML codes for the R function `summary()` are yet to be found.
+R:
+```
+> summary(Auto)
+      mpg          cylinders      displacement     horsepower        weight
+ Min.   : 9.00   Min.   :3.000   Min.   : 68.0   Min.   : 46.0   Min.   :1613
+ 1st Qu.:17.00   1st Qu.:4.000   1st Qu.:105.0   1st Qu.: 75.0   1st Qu.:2225
+ Median :22.75   Median :4.000   Median :151.0   Median : 93.5   Median :2804
+ Mean   :23.45   Mean   :5.472   Mean   :194.4   Mean   :104.5   Mean   :2978
+ 3rd Qu.:29.00   3rd Qu.:8.000   3rd Qu.:275.8   3rd Qu.:126.0   3rd Qu.:3615
+ Max.   :46.60   Max.   :8.000   Max.   :455.0   Max.   :230.0   Max.   :5140
 
-Printing mininum, maximum, and other summary statistics provided by `summary()` 
-can be done using other SAS products such as `proc freq`.
+  acceleration        year           origin                      name
+ Min.   : 8.00   Min.   :70.00   Min.   :1.000   amc matador       :  5
+ 1st Qu.:13.78   1st Qu.:73.00   1st Qu.:1.000   ford pinto        :  5
+ Median :15.50   Median :76.00   Median :1.000   toyota corolla    :  5
+ Mean   :15.54   Mean   :75.98   Mean   :1.577   amc gremlin       :  4
+ 3rd Qu.:17.02   3rd Qu.:79.00   3rd Qu.:2.000   amc hornet        :  4
+ Max.   :24.80   Max.   :82.00   Max.   :3.000   chevrolet chevette:  4
+                                                 (Other)           :365
+```
+
+SAS code:
+```sas
+proc iml;
+    use Auto; * Auto is an existing dataset and NOT a matrix ;
+    summary var _all_; * _all_ does not get char vars;
+    *summary var _char_; * Does not work for char vars ;
+    close Auto;
+quit;
+```
+
+SAS result (SAS Studio screenshot):
+
+![iml2-summary1-sas.png](iml2-summary1-sas.png)
+
+
+The SAS/IML `SUMMARY` statement must have a dataset open (via `USE` statement) 
+in order to work. Documentation [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect474.htm&docsetVersion=14.3&locale=en).
+
+For summary statictics of non-numeric data, other SAS features may be used, 
+such as `proc means`.
 
 ---
 
@@ -2528,10 +2569,7 @@ can be done using other SAS products such as `proc freq`.
 ### Codes for item 8
 
 ```sas
-* R > college = read.csv("College.csv") ;
-* R > rownames(college)=college[,1] ;
-* R > college=college[,-1] ;
-
+*R> college = read.csv("College.csv") ;
 proc import dbms=csv 
             file='/folders/myshortcuts/test/College.csv' 
             out=collegeds
@@ -2543,33 +2581,185 @@ run;
 * Load the dataset ;
 proc iml;
 
+    *R> rownames(college)=college[,1] ;
+    *R> college=college[,-1] ;
     use collegeds;
     read all var { VAR1 } into names; * This picks the first column ;
-    *read all var _all_ into college; * This does not work, variable Private is not loaded ;
+    *read all var _all_ into college; * Does not not load char vars when num vars are present ;
     read all var _num_ into college[colname=varnames]; * This loads all numeric variables in collegds into the college matrix ;
-    read all var { Private } ; * This loads the Private variable into its own vector, default name is also Private ;	
-    close collegeds;
+    read all var { Private } ; * This loads the Private variable into its own vector, default name is also Private ;    
     
     mattrib college rowname=names;
     mattrib Private rowname=names;
     
-    * R > fix(college) ;
-
+    *R> fix(college) ;
     * SAS Studio can display the table when double clicked but edit not allowed ;
     * SAS Windowing Environment supports cell edits ;
+    *print college Private; * The Private vector will be printed separately;
+    
+    *R> summary(college) ;
+    * Almost there: SUMMARY statement ;
+    *summary class {Private} 
+            var _all_ 
+            opt { print save }
+    ;
+    
+    close collegeds;
+    
+    *R> summary(college) ;
+    * Close enough: using procs freq and mean to mimic the output of R summary() ;
+    submit;
+        proc freq data=collegeds;
+            *table _char_ / nocum nocol norow nopercent maxlevels=6; * This also shows the first column ;
+            table Private / nocum nocol norow nopercent;
+        run;
+        
+        proc means data=collegeds min q1 median mean q3 max;
+            var _numeric_;
+        run;
+    endsubmit;
+    
+    *R> pairs(college[,1:10]) ;
+    * Using proc sgscatter, but get subset first ;
+    college10 = college[,1:10]; * These columns are the first 10 numeric columns in College.csv ;
+    college10names = varnames[1:10] // { "Private" }; * Extra name for Private vector ;    
+    create college10ds from college10 Private [colname=college10names];
+    append from college10 Private;
+    close college10ds;
+    submit;
+        proc sgscatter data=college10ds ;
+            *matrix _all_; * Does not support char vars ;
+            matrix _numeric_ / group=Private;
+            *matrix Apps Accept / group=Private;
+        run;
+    endsubmit;
+    
+    *R> plot(college$Private, college$Outstate) ;    
+    call box(college[,"Outstate"]) category=Private label={"Outstate"};
+    *call box(college[,"outstate"]) 
+            category=Private 
+            label={"Outstate"}
+            datalabel=names;    * With "identify" ;
+    
+    *R> Elite=rep("No",nrow(college)) ; * TODO rep() ;
+    d = dimension(college);
+    Elite = j(d[1], 1, "No "); * "No " Must have extra space for allocation for "Yes" ;
+    
+    *R> Elite[college$Top10perc>50]="Yes" ; * Set "Yes" to Elite where Top10perc>50 ;
+    Elite[loc(college[,"Top10perc"] > 50)] = "Yes"; * TODO loc() ;
+    *print Elite;
+    
+    *R> Elite <- as.factor(Elite) ;
+    * SAS/IML has no factors ;
+    
+    *R> college <- data.frame(college, Elite) ; * TODO data.frame() ;
+    *college = college || Elite; * Does not work, cannot mix types;
+    
+    *R> summary(college) ;
+    * Showing summary of just Elite instead ;
+    create eliteds from Elite[colname="Elite"]; * Write data to dataset first ; * TODO create, append ;
+    append from Elite;
+    close eliteds;
+    submit;
+        proc freq data=eliteds;
+            table Elite / nocum nocol norow nopercent;
+        run;
+    endsubmit;
 
-    print college Private; * The Private vector will be printed separately;
+    *R> plot(college$Elite, college$Outstate) ;
+    call box(college[,"Outstate"]) category=Elite label={"Outstate"};
     
-    * R > summary(college) ;
+    *R> par(mfrow = c(2, 2)) ; * TODO par() ;
+    * May have similar effects to SAS ODS statements ;
     
-    * TODO ;
+    *R> hist(college$Apps) ;
+    *R> hist(college$Accept) ;
+    *R> hist(college$Enroll) ;
+    *R> hist(college$Outstate) ;
+    call histogram(college[,"Apps"]);
+    call histogram(college[,"Accept"]);
+    call histogram(college[,"Enroll"]);
+    call histogram(college[,"Outstate"]);
 
 quit;
 ```
+
+---
+
+### Codes for item 9
+
+```sas
+*ISLR> This exercise involves the Auto data set studied in the lab. ;
+*R> Auto <- read.csv("Auto.csv", header = TRUE, na.strings = "?") ;
+proc import dbms=csv file='/folders/myshortcuts/test/Auto.csv' out=autods replace;
+run;
+
+*ISLR> Make sure that the missing values have been removed from the data. ;
+*R> Auto <- na.omit(Auto) ;
+data autods;
+    set autods;    * This is a rewrite ;
+    
+    _hasNull = 0;
+    
+    array nums{*} _numeric_;
+    array chars{*} _character_;
+    
+    do i = 1 to dim(nums);
+        if nums{i} = . then do;
+            _hasNull = 1;
+            leave;
+        end;
+    end;
+    
+    do i = 1 to dim(chars);
+        if chars{i} = '' then do;
+            _hasNull = 1;
+            leave;
+        end;
+    end;
+    
+    if _hasNull then do;
+        putlog "NOTE: NULL detected " _all_;
+        delete;
+    end;
+    
+    drop i _hasNull;
+run;
+
+
+*ISLR> Which of the predictors are quantitative, and which are qualitative? ;
+* See var list ;
+proc means data=autods range mean std;
+    var mpg cylinders displacement horsepower weight acceleration;
+run;
+
+*ISLR> What is the range of each quantitative predictor? What is the mean and 
+*   standard deviation of each quantitative predictor? ;
+* See above proc means ;
+
+*ISLR> Now remove the 10th through 85th observations. What is the range, mean, 
+*   and standard deviation of each predictor in the subset of the data that remains? ;
+data autods2;
+    set autods;
+    if (_n_ < 10) or (_n_ > 85) ; * Subsetting if ;
+run;
+proc means data=autods2 range mean std;
+    var mpg cylinders displacement horsepower weight acceleration;
+run;
+
+*ISLR> Create some plots highlighting the relationships among the predictors. ;
+*R> pairs(Auto) ;
+proc sgscatter data=autods;
+    matrix _numeric_;
+run;
+
+```
+
+
+---
 
 > WIP
 
 <!--
 > [*4]
 -->
-
