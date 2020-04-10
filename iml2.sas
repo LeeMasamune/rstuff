@@ -441,39 +441,25 @@ proc sgscatter data=autods;
     matrix _numeric_;
 run;
 
+proc iml;
+    nums = { 1, 2, 3, 4 };
+    even = {[4] "No "}`; * backtick (`) is transpose operator, postfix unary ;
+    print even; * No No No No ;
+    
+    even[loc(mod(nums, 2) = 0)] = "Yes";
+    print even; * No Yes No Yes ;
+quit;
+
+proc iml;
+    nums = { 1, 2, 3, 4 };
+    mods = mod(nums, 2) = 0;
+    print mods; * 0 1 0 1 ;
+
+    select = loc(mods);
+    print select; * 2 4 ;
+    
+    nums2 = nums[select]; * select rows 2 and 4 ;
+    print nums2;
+quit;
+
 ods html close;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

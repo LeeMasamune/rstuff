@@ -46,8 +46,12 @@ The *Lab* sections of ISLR 7th printing will be used as basis.
     * R [Function `identify()`](#function-identify-p51)
     * R [Function `summary()` (p.51)](#function-summary-p51)
 * ISLR [2.4 Exercises, *Applied*](#24-exercises-applied)
-    * SAS [Codes for Item 8](#codes-for-item-8)
-    * SAS [Codes for Item 9](#codes-for-item-9) (no IML)
+    * R [Function `rep()`](#function-rep-p55)
+    * SAS/IML [Function `loc()`](#function-loc) (used in *Codes for Item 8*)
+    * R [Function `data.frame()`](#function-dataframe-p55)
+    * R [Function `par()`](#function-par-p55)
+    * SAS/IML [Codes for Item 8](#codes-for-item-8) (with `SUBMIT`...`ENDSUBMIT`)
+    * SAS [Codes for Item 9](#codes-for-item-9) (no `proc iml`)
 
 ---
 
@@ -1336,7 +1340,7 @@ Alternatives:
 ### Member access (p.47)
 
 Member access in SAS/IML matrices are done using `[]` "subscripts" similar to R.
-Negative index values do not work.
+Non-positive index values do not work.
 
 R:
 ```
@@ -2566,6 +2570,212 @@ such as `proc means`.
 
 ---
 
+### Function `rep()` (p.55)
+
+R:
+```
+> Elite=rep("No",nrow(college))
+```
+
+SAS code:
+```sas
+proc iml;
+    * Assuming 'college' matrix already exists ;
+    d = dimension(college);
+    nrow = d[1];
+    Elite = j(nrow, 1, "No");
+
+    * Shorter but less readable ;
+    Elite = j(dimension(college)[1], 1, "No");
+quit;
+```
+
+Alternatives and documentation 
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_workmatrix_sect007.htm&docsetVersion=14.3&locale=en).
+
+---
+
+### Function `loc()`
+
+R:
+```
+> nums <- c(1, 2, 3, 4)
+> even <- rep("No", 4)
+> even
+[1] "No" "No" "No" "No"
+> even[nums %% 2 == 0] <- "Yes"
+> even
+[1] "No"  "Yes" "No"  "Yes"
+```
+
+SAS code:
+```sas
+proc iml;
+    nums = { 1, 2, 3, 4 };
+    even = {[4] "No "}`; * backtick (`) is transpose operator, postfix unary ;
+    print even; * No No No No ;
+    
+    even[loc(mod(nums, 2) = 0)] = "Yes"; * <---- loc() is used here ;
+    print even; * No Yes No Yes ;
+quit;
+```
+
+In the above R example, an expression is used as member access for the vector 
+`even`. Alone, its output would be a boolean vector:
+```
+> nums %% 2 == 0
+[1] FALSE  TRUE FALSE  TRUE
+```
+
+This corresponding SAS/IML code has a similar effect:
+```sas
+proc iml;
+    nums = { 1, 2, 3, 4 };
+    mods = mod(nums, 2) = 0; * <---- nums %% 2 == 0 ;
+    print mods;
+quit;
+```
+
+SAS output (HTML):
+<table class="table" cellspacing="0" cellpadding="5" rules="all" frame="box" bordercolor="#C1C1C1" summary="Procedure IML: mods">
+<colgroup>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="c b header" scope="col">mods</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="r data">0</td>
+</tr>
+<tr>
+<td class="r data">1</td>
+</tr>
+<tr>
+<td class="r data">0</td>
+</tr>
+<tr>
+<td class="r data">1</td>
+</tr>
+</tbody>
+</table>
+
+However, a vector of zeroes and ones cannot be used as an index in SAS/IML, as vector indices must be a positive:
+```sas
+proc iml;
+    nums = { 1, 2, 3, 4 };
+    mods = mod(nums, 2) = 0;
+    print mods; * 0 1 0 1 ;
+
+    nums2 = nums[mods];
+    print nums2;
+quit;
+```
+
+SAS log:
+```
+ 74         proc iml;
+ NOTE: IML Ready
+ 75             nums = { 1, 2, 3, 4 };
+ 76             mods = mod(nums, 2) = 0;
+ 77             print mods;
+ 77       !                 * 0 1 0 1 ;
+ 79             nums2 = nums[mods];
+ ERROR: (execution) Invalid subscript or subscript out of range.
+```
+
+The SAS/IML function `loc()` may be used to create proper indices. Note that 
+the actual behavior of this function is to find nonzero elements of a matrix. 
+Documentation [here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect235.htm&docsetVersion=14.3&locale=en):
+```sas
+proc iml;
+    nums = { 1, 2, 3, 4 };
+    mods = mod(nums, 2) = 0;
+    print mods; * 0 1 0 1 ;
+
+    select = loc(mods);
+    print select; * 2 4 ;
+    
+    nums2 = nums[select]; * select rows 2 and 4 ;
+    print nums2;
+quit;
+```
+
+SAS result (HTML);
+<table class="table" cellspacing="0" cellpadding="5" rules="all" frame="box" bordercolor="#C1C1C1" summary="Procedure IML: select">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="c b header" colspan="2" scope="colgroup">select</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="r data">2</td>
+<td class="r data">4</td>
+</tr>
+</tbody>
+</table>
+
+<table class="table" cellspacing="0" cellpadding="5" rules="all" frame="box" bordercolor="#C1C1C1" summary="Procedure IML: nums2">
+<colgroup>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="c b header" scope="col">nums2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="r data">2</td>
+</tr>
+<tr>
+<td class="r data">4</td>
+</tr>
+</tbody>
+</table>
+
+Vectors used as indices examples
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_workmatrix_sect019.htm&docsetVersion=14.3&locale=en#imlug_workmatrix000806).
+
+---
+
+### Function `data.frame()` (p.55)
+
+R:
+```
+> college=data.frame(college,Elite)
+```
+
+There are no data frames in SAS/IML [*4].
+> [*4] Needs verification
+
+In the R code above, the data.frame() function is used to append the `Elite` 
+vector to the existing dataframe `college`. SAS/IML may append column vectors 
+using the horizontal concatenation operator (`||`). Documentation
+[here](https://documentation.sas.com/?docsetId=imlug&docsetTarget=imlug_langref_sect032.htm&docsetVersion=14.3&locale=en).
+
+---
+
+### Function `par()` (p.55)
+
+R:
+```
+> par(mfrow=c(2,2))
+```
+
+The effects of R's `par()` function may be approximated by various SAS ODS 
+statements which is dependent on the ODS output. Documentation
+[here](https://documentation.sas.com/?docsetId=odsug&docsetTarget=p1d1clmh7f8594n1puspnnds2kzt.htm&docsetVersion=9.4&locale=en).
+
+---
+
 ### Codes for item 8
 
 ```sas
@@ -2641,23 +2851,23 @@ proc iml;
             label={"Outstate"}
             datalabel=names;    * With "identify" ;
     
-    *R> Elite=rep("No",nrow(college)) ; * TODO rep() ;
+    *R> Elite=rep("No",nrow(college)) ;
     d = dimension(college);
     Elite = j(d[1], 1, "No "); * "No " Must have extra space for allocation for "Yes" ;
     
     *R> Elite[college$Top10perc>50]="Yes" ; * Set "Yes" to Elite where Top10perc>50 ;
-    Elite[loc(college[,"Top10perc"] > 50)] = "Yes"; * TODO loc() ;
+    Elite[loc(college[,"Top10perc"] > 50)] = "Yes";
     *print Elite;
     
     *R> Elite <- as.factor(Elite) ;
     * SAS/IML has no factors ;
     
-    *R> college <- data.frame(college, Elite) ; * TODO data.frame() ;
+    *R> college <- data.frame(college, Elite) ;
     *college = college || Elite; * Does not work, cannot mix types;
     
     *R> summary(college) ;
     * Showing summary of just Elite instead ;
-    create eliteds from Elite[colname="Elite"]; * Write data to dataset first ; * TODO create, append ;
+    create eliteds from Elite[colname="Elite"]; * Write data to dataset first ;
     append from Elite;
     close eliteds;
     submit;
@@ -2669,7 +2879,7 @@ proc iml;
     *R> plot(college$Elite, college$Outstate) ;
     call box(college[,"Outstate"]) category=Elite label={"Outstate"};
     
-    *R> par(mfrow = c(2, 2)) ; * TODO par() ;
+    *R> par(mfrow = c(2, 2)) ;
     * May have similar effects to SAS ODS statements ;
     
     *R> hist(college$Apps) ;
@@ -2761,5 +2971,5 @@ run;
 > WIP
 
 <!--
-> [*4]
+> [*5]
 -->
