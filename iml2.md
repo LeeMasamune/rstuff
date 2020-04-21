@@ -44,7 +44,7 @@ The *Lab* sections of ISLR 7th printing will be used as basis.
     * R [Function `hist()`](#function-hist-p50)
     * R [Function `pairs()`](#function-pairs-p50)
     * R [Function `identify()`](#function-identify-p51)
-    * R [Function `summary()` (p.51)](#function-summary-p51)
+    * R [Function `summary()`](#function-summary-p51)
 * ISLR [2.4 Exercises, *Applied*](#24-exercises-applied)
     * R [Function `rep()`](#function-rep-p55)
     * SAS/IML [Function `loc()`](#function-loc) (used in *Codes for Item 8*)
@@ -2964,7 +2964,6 @@ proc sgscatter data=autods;
 run;
 
 ```
-
 
 ---
 
